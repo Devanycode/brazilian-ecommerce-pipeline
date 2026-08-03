@@ -80,7 +80,7 @@ Llave compuesta: (order_id + order_item_id)
 
 order_id   ->  Orders.order_id
 
-# Relación 
+## Relación 
 
 Orders (1) -> Order_items (N)
 
@@ -94,4 +94,47 @@ Orders (1) -> Order_items (N)
 
 -- 
 
-#
+# Products
+
+## Descripción 
+Contiene la información de los productos 
+
+## ¿Qué representa una fila?
+La descripción de un producto 
+
+## Llave primaria (PK)
+product_id 
+
+## Relación
+order_items (N) -> Products (1)
+
+## Observaciones 
+- Contiene el nombre de la categoría, se puede analizar las más vendidas
+- Tiene la información de las dimensiones del producto
+- Tiene el nomre y la descripción del producto
+
+
+---
+
+# Order_payments
+
+## Descripción 
+Contiene la información del proceso de pago de un pedido
+
+## ¿Qué representa una fila?
+El proceso de pago de un pedido
+
+## Llave primaria (PK)
+Llave_compuesta: (order_id + payment_sequential)
+
+## Llave foránea (FK)
+order_id -> Orders.order_id
+
+## Relación 
+Orders (1) -> Order_payments (N)
+
+## Descripción
+- Contiene la categoría del producto.
+- Tiene dimensiones físicas (peso, largo, alto, ancho).
+- Contiene la información del medio de pago 
+- Hay productos en `order_items` que no existen en esta tabla

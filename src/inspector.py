@@ -1,6 +1,6 @@
 import pandas as pd
 
-def inspect_csv(df) -> dict:
+def inspect_csv(df: pd.DataFrame) -> None:
     """Devolverá un reporte detallado del archivo csv que se cargó"""
     report = {
         "filas": df.shape[0],
@@ -17,4 +17,4 @@ def inspect_csv(df) -> dict:
     for key, value in report.items():
         print(f"{key}:\n{value}\n")
         
-    return report
+    return 

@@ -1,5 +1,12 @@
 import pandas as pd
 
+
+
+# ========================
+# Union de Tablas
+# ========================
+
+
 def merge_order_customers(
         orders_df: pd.DataFrame, 
         customers_df: pd.DataFrame
@@ -24,22 +31,87 @@ def merge_order_items(
         validate= "one_to_many"
     )
 
+def merge_order_products(
+        tabla_analitica: pd.DataFrame, 
+        order_products_df: pd.DataFrame
+    ) -> pd.DataFrame:
+    """Une la tabla 'order_products' con la tabla analítica"""
+    df = tabla_analitica.merge(
+        order_products_df,
+        on="product_id",
+        how="left",
+        validate="many_to_one"
+    )
+    return df
+
+def merge_order_payments(
+    tabla_analitica: pd.DataFrame,
+    order_payments_df: pd.DataFrame
+    ) -> pd.DataFrame:
+    """Une la tabla 'order_payments' con la tabla analítica"""
+    order_payments_df = order_payments_df.copy()
+
+    # Convertimos order_payments para no tener una unión N:N
+    # Agregamos a nivel de pedido (1 fila = 1 pedido)
+    pagos_por_pedido = (
+        order_payments_df
+        .groupby("order_id", as_index=False)
+        .agg(
+            num_pagos=("payment_sequential", "count"),
+            tipo_pago_principal=("payment_type", "first"),
+            cuotas_principales=("payment_installments", "first"),
+            total_pagado=("payment_value", "sum")
+        )
+    )
+
+    df = tabla_analitica.merge(
+        pagos_por_pedido,
+        on="order_id",
+        how="left",
+        validate="many_to_one"
+    )
+    return df
 
 def crear_tabla_analitica(
     customers_df: pd.DataFrame,
     orders_df: pd.DataFrame,
-    order_items_df: pd.DataFrame
+    order_items_df: pd.DataFrame,
+    order_products_df: pd.DataFrame,
+    order_payments_df: pd.DataFrame
 ) -> pd.DataFrame:
     """Construye la tabla analítica principal del proyecto."""
-    orders_customers = merge_order_customers(orders_df, customers_df)
-    tabla_analitica = merge_order_items(orders_customers, order_items_df)
+    tabla_analitica = merge_order_customers(orders_df, customers_df)
+    tabla_analitica = merge_order_items(tabla_analitica, order_items_df)
+    tabla_analitica = merge_order_products(tabla_analitica, order_products_df)
+    tabla_analitica = merge_order_payments(tabla_analitica, order_payments_df)
 
     return tabla_analitica
 
 
+
+# ==============================
+# Preparación de Columnas 
+# ==============================
+
+def conversion_a_datetime(tabla_analitica: pd.DataFrame) -> pd.DataFrame:
+    """Convierte las columnas de fechas en valores Datetime"""
+    tabla = tabla_analitica.copy()
+    tabla["order_purchase_timestamp"] = pd.to_datetime(tabla["order_purchase_timestamp"])
+    tabla["order_approved_at"] = pd.to_datetime(tabla["order_approved_at"])
+    tabla["order_delivered_carrier_date"] = pd.to_datetime(tabla["order_delivered_carrier_date"])
+    tabla["order_delivered_customer_date"] = pd.to_datetime(tabla["order_delivered_customer_date"])
+    tabla["order_estimated_delivery_date"] = pd.to_datetime(tabla["order_estimated_delivery_date"])
+    return tabla
+
+
+# ==============================
+# Agregar Columnas 
+# ==============================
+
+
 def agregar_total_pedido(df: pd.DataFrame) -> pd.DataFrame:
     """agrega una columna con el total de cada pedido."""
-    df["total_pedido"] = df.groupby("order_id", as_index=False)["price"].transform("sum")
+    df["total_pedido"] = df.groupby("order_id")["price"].transform("sum")
     return df
 
 def agregar_numero_items(df: pd.DataFrame) -> pd.DataFrame:
@@ -68,10 +140,6 @@ def agregar_columnas_fecha(df: pd.DataFrame) -> pd.DataFrame:
     """
     df = df.copy()
 
-    df["order_purchase_timestamp"] = (
-        pd.to_datetime(df["order_purchase_timestamp"])
-    )
-
     df["nombre_mes"] = (
         df["order_purchase_timestamp"].dt.month_name(locale='es_ES.utf8')
     )
@@ -81,5 +149,6 @@ def agregar_columnas_fecha(df: pd.DataFrame) -> pd.DataFrame:
     )
 
     return df
+
 
 
