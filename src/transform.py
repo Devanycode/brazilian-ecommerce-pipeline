@@ -42,11 +42,16 @@ def merge_order_products(
         how="left",
         validate="many_to_one"
     )
+
+    df["product_category_name"] = (
+        df["product_category_name"]
+        .fillna("Sin categoría")
+    )
     return df
 
 def merge_order_payments(
-    tabla_analitica: pd.DataFrame,
-    order_payments_df: pd.DataFrame
+        tabla_analitica: pd.DataFrame,
+        order_payments_df: pd.DataFrame
     ) -> pd.DataFrame:
     """Une la tabla 'order_payments' con la tabla analítica"""
     order_payments_df = order_payments_df.copy()
@@ -72,18 +77,37 @@ def merge_order_payments(
     )
     return df
 
+def merge_sellers(
+        tabla_analitica: pd.DataFrame,
+        sellers_df: pd.DataFrame
+    ) -> pd.DataFrame:
+    """Une la tabla 'sellers' con la tabla analítica"""
+    df = tabla_analitica.merge(
+        sellers_df,
+        on="seller_id",
+        how="left",
+        validate="many_to_one"
+    )
+    df["seller_state"] = df["seller_state"].fillna("sin_vendedor")
+    df["seller_city"] = df["seller_city"].fillna("sin_vendedor")
+    df["seller_zip_code_prefix"] = df["seller_zip_code_prefix"].fillna("00000")
+    return df
+
+
 def crear_tabla_analitica(
     customers_df: pd.DataFrame,
     orders_df: pd.DataFrame,
     order_items_df: pd.DataFrame,
     order_products_df: pd.DataFrame,
-    order_payments_df: pd.DataFrame
+    order_payments_df: pd.DataFrame,
+    sellers_df: pd.DataFrame
 ) -> pd.DataFrame:
     """Construye la tabla analítica principal del proyecto."""
     tabla_analitica = merge_order_customers(orders_df, customers_df)
     tabla_analitica = merge_order_items(tabla_analitica, order_items_df)
     tabla_analitica = merge_order_products(tabla_analitica, order_products_df)
     tabla_analitica = merge_order_payments(tabla_analitica, order_payments_df)
+    tabla_analitica = merge_sellers(tabla_analitica, sellers_df)
 
     return tabla_analitica
 
@@ -148,6 +172,12 @@ def agregar_columnas_fecha(df: pd.DataFrame) -> pd.DataFrame:
         df["order_purchase_timestamp"].dt.month
     )
 
+    return df
+
+def agregar_indicador_venta_local(df: pd.DataFrame) -> pd.DataFrame:
+    """Indica si el vendedor y el cliente están en el mismo estado."""
+    df = df.copy()
+    df["es_venta_local"] = df["customer_state"] == df["seller_state"]
     return df
 
 

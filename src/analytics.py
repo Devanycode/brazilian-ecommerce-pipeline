@@ -64,20 +64,24 @@ def compras_por_mes(df: pd.DataFrame) -> pd.DataFrame:
     )
 
 
-def tiempo_promedio_entrega_por_estado(orders_df: pd.DataFrame) -> pd.DataFrame:
+def tiempo_promedio_entrega_por_estado(tabla_analitica: pd.DataFrame) -> pd.DataFrame:
     """Calcula el tiempo promedio por estado desde que
      se realiza la compra hasta que le llega el pedido al cliente"""
-    tabla = orders_df.copy()
+    tabla = tabla_analitica.copy()
 
     # Eliminamos los pedidos que aparezcan duplicados debido a los items
     tabla = tabla.drop_duplicates(subset="order_id", keep="first")
+    tabla = tabla[tabla["order_delivered_customer_date"].notna()]
     tabla["tiempo_de_entrega"] = tabla["order_delivered_customer_date"] - tabla["order_purchase_timestamp"]
-    return (
+    tabla = (
         tabla
         .groupby("customer_state", as_index=False)
-        .agg(tiempo_promedio_entrega = ("tiempo_de_entrega", "mean"))
-        .sort_values(by="tiempo_promedio_entrega")
+        .agg(tiempo_promedio_entrega_dias = ("tiempo_de_entrega", "mean"))
+        .sort_values(by="tiempo_promedio_entrega_dias", ascending=False)
     )
+    tabla["tiempo_promedio_entrega_dias"] = tabla["tiempo_promedio_entrega_dias"].dt.total_seconds() / 86400
+
+    return tabla
 
 
 def ingresos_por_categoria(tabla_analitica: pd.DataFrame) -> pd.DataFrame:
@@ -91,6 +95,14 @@ def ingresos_por_categoria(tabla_analitica: pd.DataFrame) -> pd.DataFrame:
         .sort_values(ascending=False, by="ingresos_categoria")
     )
 
+def ingresos_por_estado_del_vendedor(tabla_analitica: pd.DataFrame) -> pd.DataFrame:
+    """Calcula los ingresos que tienen los vendedores agrupados por estado"""
+    return (
+        tabla_analitica
+        .groupby("seller_state", as_index=False)
+        .agg(ingresos_vendedores=("price", "sum"))
+        .sort_values(by="ingresos_vendedores", ascending=False)
+    )
 
 
 
@@ -137,3 +149,34 @@ def validar_ventas_vs_pagos(
     comparacion["diferencia_pct"] = (comparacion["diferencia"] / comparacion["ventas_totales"]) * 100
     
     return comparacion.sort_values("diferencia_pct", ascending=False)
+
+
+def ventas_locales_vs_foraneas_por_estado(tabla_analitica: pd.DataFrame) -> pd.DataFrame:
+    """
+    Compara compras a vendedores locales vs foráneos por estado del cliente.
+    """
+    df = tabla_analitica.copy()
+    resultado = (
+        df
+        .groupby(["customer_state", "es_venta_local"], as_index=False)
+        .agg(ventas=("price", "sum"))
+        .pivot(index="customer_state", columns="es_venta_local", values="ventas")
+        .reset_index()
+    )
+    
+    # Renombrar columnas: True = local, False = foraneo
+    resultado = resultado.rename(columns={
+        True: "ventas_local",
+        False: "ventas_foraneo"
+    })
+    
+    # Si un estado solo compra de un tipo, el otro lado queda nulo
+    resultado = resultado.fillna(0)
+    
+    resultado["diferencia"] = resultado["ventas_local"] - resultado["ventas_foraneo"]
+    resultado["pct_local"] = (
+        resultado["ventas_local"] / 
+        (resultado["ventas_local"] + resultado["ventas_foraneo"]) * 100
+    )
+    
+    return resultado.sort_values("pct_local", ascending=False)

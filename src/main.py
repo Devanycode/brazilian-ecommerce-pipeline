@@ -12,6 +12,7 @@ order_items_df = extract.load_order_items(f"{DATA_PATH}/olist_order_items_datase
 order_products_df = extract.load_order_products(f"{DATA_PATH}/olist_products_dataset.csv")
 order_payments_df = extract.load_order_payments(f"{DATA_PATH}/olist_order_payments_dataset.csv")
 sellers_df = extract.load_sellers(f"{DATA_PATH}/olist_sellers_dataset.csv")
+reviews_df = pd.read_csv(f"{DATA_PATH}/olist_order_reviews_dataset.csv")
 
 # 2. TRANSFORM - Pipeline completo
 tabla = tr.crear_tabla_analitica(
@@ -19,14 +20,15 @@ tabla = tr.crear_tabla_analitica(
     orders_df, 
     order_items_df, 
     order_products_df,
-    order_payments_df
+    order_payments_df,
+    sellers_df
 )
 tabla = tr.conversion_a_datetime(tabla)
 tabla = tr.agregar_total_pedido(tabla)
 tabla = tr.agregar_numero_items(tabla)
 tabla = tr.agregar_porcentaje_item(tabla)
 tabla = tr.agregar_columnas_fecha(tabla)
-
+tabla = tr.agregar_indicador_venta_local(tabla)
 
 print(f"Tabla analítica creada: {tabla.shape[0]} filas, {tabla.shape[1]} columnas")
 
@@ -36,6 +38,8 @@ ticket_estado = an.ticket_promedio_por_estado(tabla)
 compras_mes = an.compras_por_mes(tabla)
 tiempo_entrega = an.tiempo_promedio_entrega_por_estado(tabla)
 ingresos_categoria = an.ingresos_por_categoria(tabla)
+ingresos_estados_vendedores = an.ingresos_por_estado_del_vendedor(tabla)
+ventas_locales_vs_foraneas = an.ventas_locales_vs_foraneas_por_estado(tabla)
 
 print("\n--- TOP 5 ESTADOS POR VENTAS ---")
 print(ventas_estado.head())
@@ -52,31 +56,42 @@ print(tiempo_entrega)
 print("\n--- INGRESOS POR CATEGORIA ---")
 print(ingresos_categoria)
 
+print("\n--- INGRESOS POR ESTADO DEL VENDEDOR ---")
+print(ingresos_estados_vendedores)
 
+print("\n--- VENTAS LOCALES VS FORÁNEAS POR ESTADO ---")
+print(ventas_locales_vs_foraneas)
 
-
-
-
-
-
-
-
-
-
-
-
- # Por hacer
-"""
-import inspector 
-
-sellers = inspector.inspect_csv(sellers_df)
-
-print(an.validar_ventas_vs_pagos(
+# SANITY CHECKS
+validar_ventas_pagos = (an.validar_ventas_vs_pagos(
     orders_df,
     customers_df,
     order_items_df,
     order_payments_df
-))"""
+))
+
+print("--- VALIDACIÓN DE VENTAS VS PAGOS ---")
+print(validar_ventas_pagos)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+####-------
+
 
 
 """⬜ Número de pedidos únicos en orders vs número de pedidos

@@ -79,10 +79,14 @@ Llave compuesta: (order_id + order_item_id)
 ## Llave Foránea (FK)
 
 order_id   ->  Orders.order_id
+product_id  ->  Products.product_id
+seller_id  ->  Sellers.seller_id
 
 ## Relación 
 
 Orders (1) -> Order_items (N)
+Products (1) -> Order_items (N)
+Sellers (1)  -> Order_items (N)
 
 ## Observaciones
 - Un solo pedido puede contener varios producto.
@@ -133,8 +137,26 @@ order_id -> Orders.order_id
 ## Relación 
 Orders (1) -> Order_payments (N)
 
-## Descripción
+## Observaciones
 - Contiene la categoría del producto.
 - Tiene dimensiones físicas (peso, largo, alto, ancho).
 - Contiene la información del medio de pago 
-- Hay productos en `order_items` que no existen en esta tabla
+- Hay productos en order_items que no existen en esta tabla
+
+
+# Sellers 
+
+## Descripción 
+Contiene la información de los vendedores
+
+## ¿Qué representa una fila?
+Representa un vendedor y su información
+
+## Llave Primaria (PK)
+seller_id
+
+## Relación 
+Sellers (1)  ->  Order_items (N)
+
+## Observaciones 
+- Contiene el código postal, ciudad y estado de cada vendedor
