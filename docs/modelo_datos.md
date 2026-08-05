@@ -160,3 +160,27 @@ Sellers (1)  ->  Order_items (N)
 
 ## Observaciones 
 - Contiene el código postal, ciudad y estado de cada vendedor
+
+---
+# Order_reviews
+
+## Descripción 
+Contiene las reseñas de los clientes sobre sus pedidos.
+
+## ¿Qué representa una fila?
+Una reseña individual asociada a un pedido.
+
+## Llave Primaria (PK)
+review_id
+
+## Llave Foránea (FK)
+order_id → Orders.order_id
+
+## Relación 
+Orders (1) → Order_reviews (N)
+
+## Observaciones
+- Un pedido puede tener múltiples reviews (actualizaciones o seguimientos).
+- `review_id` es único por sí solo; identifica una sola reseña.
+- `review_score` va de 1 a 5.
+- Muchas reviews no tienen comentario de texto.

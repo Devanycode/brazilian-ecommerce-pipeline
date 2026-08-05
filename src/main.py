@@ -12,16 +12,18 @@ order_items_df = extract.load_order_items(f"{DATA_PATH}/olist_order_items_datase
 order_products_df = extract.load_order_products(f"{DATA_PATH}/olist_products_dataset.csv")
 order_payments_df = extract.load_order_payments(f"{DATA_PATH}/olist_order_payments_dataset.csv")
 sellers_df = extract.load_sellers(f"{DATA_PATH}/olist_sellers_dataset.csv")
-reviews_df = pd.read_csv(f"{DATA_PATH}/olist_order_reviews_dataset.csv")
+order_reviews_df = pd.read_csv(f"{DATA_PATH}/olist_order_reviews_dataset.csv")
 
 # 2. TRANSFORM - Pipeline completo
+order_reviews_df = tr.preparacion_order_reviews(order_reviews_df)
 tabla = tr.crear_tabla_analitica(
     customers_df, 
     orders_df, 
     order_items_df, 
     order_products_df,
     order_payments_df,
-    sellers_df
+    sellers_df,
+    order_reviews_df
 )
 tabla = tr.conversion_a_datetime(tabla)
 tabla = tr.agregar_total_pedido(tabla)
@@ -29,6 +31,7 @@ tabla = tr.agregar_numero_items(tabla)
 tabla = tr.agregar_porcentaje_item(tabla)
 tabla = tr.agregar_columnas_fecha(tabla)
 tabla = tr.agregar_indicador_venta_local(tabla)
+
 
 print(f"Tabla analítica creada: {tabla.shape[0]} filas, {tabla.shape[1]} columnas")
 
@@ -40,6 +43,8 @@ tiempo_entrega = an.tiempo_promedio_entrega_por_estado(tabla)
 ingresos_categoria = an.ingresos_por_categoria(tabla)
 ingresos_estados_vendedores = an.ingresos_por_estado_del_vendedor(tabla)
 ventas_locales_vs_foraneas = an.ventas_locales_vs_foraneas_por_estado(tabla)
+satisfaccion_por_estado = an.satisfaccion_por_estado(tabla)
+pedidos_vacios = an.pedidos_vacios(orders_df, order_items_df)
 
 print("\n--- TOP 5 ESTADOS POR VENTAS ---")
 print(ventas_estado.head())
@@ -62,6 +67,12 @@ print(ingresos_estados_vendedores)
 print("\n--- VENTAS LOCALES VS FORÁNEAS POR ESTADO ---")
 print(ventas_locales_vs_foraneas)
 
+print("\n--- SATISFACCIÓN PROMEDIO POR ESTADO ---")
+print(satisfaccion_por_estado)
+
+print("\n--- PEDIDOS VACÍOS ---")
+print(pedidos_vacios)
+
 # SANITY CHECKS
 validar_ventas_pagos = (an.validar_ventas_vs_pagos(
     orders_df,
@@ -70,16 +81,8 @@ validar_ventas_pagos = (an.validar_ventas_vs_pagos(
     order_payments_df
 ))
 
-print("--- VALIDACIÓN DE VENTAS VS PAGOS ---")
+print("\n--- VALIDACIÓN DE VENTAS VS PAGOS ---")
 print(validar_ventas_pagos)
-
-
-
-
-
-
-
-
 
 
 

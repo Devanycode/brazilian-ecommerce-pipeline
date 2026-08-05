@@ -77,6 +77,24 @@ def merge_order_payments(
     )
     return df
 
+def merge_order_reviews(
+        tabla_analitica: pd.DataFrame,
+        order_reviews_df: pd.DataFrame
+    ) -> pd.DataFrame:
+    """Une la tabla 'order_reviews' con la tabla analítica"""
+    reviews = order_reviews_df.copy()
+    df = tabla_analitica.copy()
+
+    df = df.merge(
+        reviews,
+        on="order_id",
+        how="left",
+        validate="many_to_one"
+    )
+
+    return df
+
+
 def merge_sellers(
         tabla_analitica: pd.DataFrame,
         sellers_df: pd.DataFrame
@@ -100,7 +118,8 @@ def crear_tabla_analitica(
     order_items_df: pd.DataFrame,
     order_products_df: pd.DataFrame,
     order_payments_df: pd.DataFrame,
-    sellers_df: pd.DataFrame
+    sellers_df: pd.DataFrame,
+    order_reviews_df: pd.DataFrame
 ) -> pd.DataFrame:
     """Construye la tabla analítica principal del proyecto."""
     tabla_analitica = merge_order_customers(orders_df, customers_df)
@@ -108,6 +127,7 @@ def crear_tabla_analitica(
     tabla_analitica = merge_order_products(tabla_analitica, order_products_df)
     tabla_analitica = merge_order_payments(tabla_analitica, order_payments_df)
     tabla_analitica = merge_sellers(tabla_analitica, sellers_df)
+    tabla_analitica = merge_order_reviews(tabla_analitica, order_reviews_df)
 
     return tabla_analitica
 
@@ -126,6 +146,24 @@ def conversion_a_datetime(tabla_analitica: pd.DataFrame) -> pd.DataFrame:
     tabla["order_delivered_customer_date"] = pd.to_datetime(tabla["order_delivered_customer_date"])
     tabla["order_estimated_delivery_date"] = pd.to_datetime(tabla["order_estimated_delivery_date"])
     return tabla
+
+def preparacion_order_reviews(order_reviews_df: pd.DataFrame) -> pd.DataFrame:
+    """Prepara los datos de order reviews para evitar duplicados en los análisis"""
+    df = order_reviews_df.copy()
+    
+    # Debido a que su llave primaria es compuesta vamos a eliminar los duplicados de 'review_id'
+    df = df.drop_duplicates(subset="review_id", keep="first")
+    # Ahora vamos a agrupar todo a un mismo order_id
+    df = df.groupby("order_id").agg(
+        review_score_promedio=("review_score","mean"),
+        num_reviews=("review_id","count"),
+        primer_titulo=("review_comment_title","first"),
+        primer_comentario=("review_comment_message","first"),
+    )
+    # Rellenamos los títulos y comentarios vacíos
+    df["primer_titulo"] = df["primer_titulo"].fillna("sin titulo")
+    df["primer_comentario"] = df["primer_comentario"].fillna("sin mensaje")
+    return df
 
 
 # ==============================

@@ -105,7 +105,77 @@ def ingresos_por_estado_del_vendedor(tabla_analitica: pd.DataFrame) -> pd.DataFr
     )
 
 
+def ventas_locales_vs_foraneas_por_estado(tabla_analitica: pd.DataFrame) -> pd.DataFrame:
+    """
+    Compara compras a vendedores locales vs foráneos por estado del cliente.
+    """
+    df = tabla_analitica.copy()
+    resultado = (
+        df
+        .groupby(["customer_state", "es_venta_local"], as_index=False)
+        .agg(ventas=("price", "sum"))
+        .pivot(index="customer_state", columns="es_venta_local", values="ventas")
+        .reset_index()
+    )
+    
+    # Renombrar columnas: True = local, False = foraneo
+    resultado = resultado.rename(columns={
+        True: "ventas_local",
+        False: "ventas_foraneo"
+    })
+    
+    # Si un estado solo compra de un tipo, el otro lado queda nulo
+    resultado = resultado.fillna(0)
+    
+    resultado["diferencia"] = resultado["ventas_local"] - resultado["ventas_foraneo"]
+    resultado["pct_local"] = (
+        resultado["ventas_local"] / 
+        (resultado["ventas_local"] + resultado["ventas_foraneo"]) * 100
+    )
+    return resultado.sort_values("pct_local", ascending=False)
 
+
+def satisfaccion_por_estado(tabla_analitica: pd.DataFrame) -> pd.DataFrame:
+    """
+    Promedio de review_score por estado del cliente.
+    Solo considera pedidos que tienen review.
+    """
+    df = tabla_analitica.copy()
+    
+    # Dejar una fila por pedido 
+    df = df.drop_duplicates(subset="order_id", keep="first")
+    # Filtramos los nulos
+    df = df[df["review_score_promedio"].notna()]
+    df = (
+        df
+        .groupby("customer_state")
+        .agg(
+            satisfaccion_promedio=("review_score_promedio", "mean"),
+            num_reviews=("num_reviews", "sum")
+        )
+        .sort_values("satisfaccion_promedio")
+    )
+    
+    df["num_reviews"] = df["num_reviews"].astype(int)
+
+    return df
+
+def pedidos_vacios(
+        orders_df: pd.DataFrame,
+        order_items_df: pd.DataFrame
+    ) -> pd.DataFrame:
+    """
+    Identifica pedidos en 'orders' que no tienen ningún ítem en 'order_items'.
+    """
+    pedidos_con_items = order_items_df["order_id"].unique()
+    pedidos_sin_items = orders_df[~orders_df["order_id"].isin(pedidos_con_items)]
+
+    return pd.DataFrame({
+        "total_pedidos": [len(orders_df)],
+        "pedidos_con_items": [len(pedidos_con_items)],
+        "pedidos_vacios": [len(pedidos_sin_items)],
+        "porcentaje_vacios": [round(len(pedidos_sin_items) / len(orders_df) * 100, 2)]
+    })
 
 # ===========================================================
 # SANITY CHECKS
@@ -149,34 +219,3 @@ def validar_ventas_vs_pagos(
     comparacion["diferencia_pct"] = (comparacion["diferencia"] / comparacion["ventas_totales"]) * 100
     
     return comparacion.sort_values("diferencia_pct", ascending=False)
-
-
-def ventas_locales_vs_foraneas_por_estado(tabla_analitica: pd.DataFrame) -> pd.DataFrame:
-    """
-    Compara compras a vendedores locales vs foráneos por estado del cliente.
-    """
-    df = tabla_analitica.copy()
-    resultado = (
-        df
-        .groupby(["customer_state", "es_venta_local"], as_index=False)
-        .agg(ventas=("price", "sum"))
-        .pivot(index="customer_state", columns="es_venta_local", values="ventas")
-        .reset_index()
-    )
-    
-    # Renombrar columnas: True = local, False = foraneo
-    resultado = resultado.rename(columns={
-        True: "ventas_local",
-        False: "ventas_foraneo"
-    })
-    
-    # Si un estado solo compra de un tipo, el otro lado queda nulo
-    resultado = resultado.fillna(0)
-    
-    resultado["diferencia"] = resultado["ventas_local"] - resultado["ventas_foraneo"]
-    resultado["pct_local"] = (
-        resultado["ventas_local"] / 
-        (resultado["ventas_local"] + resultado["ventas_foraneo"]) * 100
-    )
-    
-    return resultado.sort_values("pct_local", ascending=False)
