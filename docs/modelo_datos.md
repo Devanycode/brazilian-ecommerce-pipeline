@@ -144,6 +144,7 @@ Orders (1) -> Order_payments (N)
 - Hay productos en order_items que no existen en esta tabla
 
 
+---
 # Sellers 
 
 ## Descripción 
