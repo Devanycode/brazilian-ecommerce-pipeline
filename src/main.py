@@ -95,8 +95,6 @@ print(validar_ventas_pagos)
 
 ####-------
 
-
-
 """⬜ Número de pedidos únicos en orders vs número de pedidos
  únicos en order_items — debería ser casi igual. Si hay 100 pedidos en orders
   pero solo 80 en items, hay 20 pedidos vacíos.
