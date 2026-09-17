@@ -33,7 +33,47 @@ Las tablas empleadas en este proyecto incluyen:
 Cada una de ellas se integra progresivamente para construir una tabla analítica única.
 
 ---
+## Instalación y uso
 
+### 1. Clonar el repositorio
+\`\`\`bash
+git clone https://github.com/Devanycode/brazilian-ecommerce-pipeline.git
+cd brazilian-ecommerce-pipeline
+\`\`\`
+
+### 2. Crear entorno virtual e instalar dependencias
+\`\`\`bash
+python -m venv .venv
+source .venv/bin/activate      # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+\`\`\`
+
+### 3. Descargar el dataset
+Este proyecto usa el dataset público **Brazilian E-Commerce Public Dataset by Olist**:
+https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce
+
+Descarga el ZIP y coloca los siguientes archivos dentro de la carpeta `data/`:
+- olist_customers_dataset.csv
+- olist_orders_dataset.csv
+- olist_order_items_dataset.csv
+- olist_products_dataset.csv
+- olist_order_payments_dataset.csv
+- olist_order_reviews_dataset.csv
+- olist_sellers_dataset.csv
+
+### 4. Configurar variables de entorno
+\`\`\`bash
+cp .env.example .env
+\`\`\`
+Y completa tus credenciales de MySQL en `.env`.
+
+### 5. Ejecutar el pipeline
+\`\`\`ejecutar src
+python main.py
+\`\`\`
+
+
+---
 ## Próximas mejoras
 
 - Incorporar reportes analíticos con Matplotlib.
