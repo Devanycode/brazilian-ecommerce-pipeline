@@ -1,5 +1,7 @@
 import pandas as pd
 import extract
+import contracts
+from inspector import inspect_csv
 import transform as tr
 import analytics as an
 
@@ -14,6 +16,13 @@ order_payments_df = extract.load_order_payments(f"{DATA_PATH}/olist_order_paymen
 sellers_df = extract.load_sellers(f"{DATA_PATH}/olist_sellers_dataset.csv")
 order_reviews_df = pd.read_csv(f"{DATA_PATH}/olist_order_reviews_dataset.csv")
 
+print(inspect_csv(
+    customers_df, 
+    contracts.CUSTOMERS_PRIMARY_KEY,
+    contracts.CUSTOMERS_COLUMNS)
+)
+orders_df = ()
+"""
 # 2. TRANSFORM - Pipeline completo
 order_reviews_df = tr.preparacion_order_reviews(order_reviews_df)
 tabla = tr.crear_tabla_analitica(
@@ -85,7 +94,7 @@ print("\n--- VALIDACIÓN DE VENTAS VS PAGOS ---")
 print(validar_ventas_pagos)
 
 
-
+"""
 
 
 

@@ -227,6 +227,9 @@ Representa una reseña asociada a un pedido.
 - `review_score` toma valores entre 1 y 5.
 - Muchas reseñas no contienen comentario de texto.
 
+
+## Nota sobre los tipos de datos
+### Los tipos esperados por columna de cada tabla están definidos y validados en src/contracts.py + src/inspector.py
 ---
 ## 2. Diagrama ER
 

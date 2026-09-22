@@ -2,7 +2,7 @@ import pandas as pd
 
 def load_customers(path: str) -> pd.DataFrame:
     """Carga la tabla customers."""
-    return pd.read_csv(path)
+    return pd.read_csv(path, dtype={"customer_zip_code_prefix": str})
 
 def load_orders(path: str) -> pd.DataFrame:
     """Carga la tabla orders."""
