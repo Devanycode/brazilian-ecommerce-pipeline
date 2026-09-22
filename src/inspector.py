@@ -67,3 +67,27 @@ def inspect_csv(df: pd.DataFrame, primary_key, columnas_esperadas: dict) -> dict
         "filas": df.shape[0],
         "nulos_por_columna": df.isnull().sum().to_dict(),
     }
+
+
+def verificar_contratos(tablas: dict) -> tuple[bool, dict]:
+    """Corre inspect_csv sobre cada tabla del diccionario y resume si todas cumplen."""
+
+    resultados = {
+        nombre: inspect_csv(df, pk, columns)
+        for nombre, (df, pk, columns) in tablas.items()
+    }
+    
+    incumplen_contrato = {
+        nombre: resultado
+        for nombre, resultado in resultados.items()
+        if not resultado["cumple_contrato"]
+    }
+
+    if incumplen_contrato:
+        print("\n"*2 + "---------------------------------------")
+        print(f"No se permite cargar, incumplen contrato las siguientes tablas:\n{list(incumplen_contrato.keys())}")
+        return False, resultados
+
+    print("\n"*2 + "---------------------------------------")
+    print("Se permite cargar, todas las tablas cumplen el contrato\n")
+    return True, resultados

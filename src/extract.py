@@ -22,4 +22,7 @@ def load_order_payments(path: str) -> pd.DataFrame:
 
 def load_sellers(path: str) -> pd.DataFrame:
     """Carga la tabla sellers"""
+    return pd.read_csv(path, dtype= {"seller_zip_code_prefix": str})
+
+def load_order_reviews(path: str) -> pd.DataFrame:
     return pd.read_csv(path)

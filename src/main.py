@@ -1,7 +1,7 @@
 import pandas as pd
 import extract
 import contracts
-from inspector import inspect_csv
+from inspector import inspect_csv, verificar_contratos
 import transform as tr
 import analytics as an
 
@@ -14,17 +14,11 @@ order_items_df = extract.load_order_items(f"{DATA_PATH}/olist_order_items_datase
 order_products_df = extract.load_order_products(f"{DATA_PATH}/olist_products_dataset.csv")
 order_payments_df = extract.load_order_payments(f"{DATA_PATH}/olist_order_payments_dataset.csv")
 sellers_df = extract.load_sellers(f"{DATA_PATH}/olist_sellers_dataset.csv")
-order_reviews_df = pd.read_csv(f"{DATA_PATH}/olist_order_reviews_dataset.csv")
+order_reviews_df = extract.load_order_reviews(f"{DATA_PATH}/olist_order_reviews_dataset.csv")
 
-print(inspect_csv(
-    customers_df, 
-    contracts.CUSTOMERS_PRIMARY_KEY,
-    contracts.CUSTOMERS_COLUMNS)
-)
-orders_df = ()
-"""
+
 # 2. TRANSFORM - Pipeline completo
-order_reviews_df = tr.preparacion_order_reviews(order_reviews_df)
+order_reviews_df_modified = tr.preparacion_order_reviews(order_reviews_df)
 tabla = tr.crear_tabla_analitica(
     customers_df, 
     orders_df, 
@@ -32,15 +26,22 @@ tabla = tr.crear_tabla_analitica(
     order_products_df,
     order_payments_df,
     sellers_df,
-    order_reviews_df
+    order_reviews_df_modified
 )
+
+# Tablas individuales 
+orders_df = tr.conversion_a_datetime(orders_df)
+order_items_df = tr.order_items_shipping_limit_convert_datetime(order_items_df) 
+order_products_df = tr.order_products_convert_float_to_int(order_products_df)
+order_reviews_df = tr.order_reviews_convert_datetime(order_reviews_df)
+
+# Tabla analítica 
 tabla = tr.conversion_a_datetime(tabla)
 tabla = tr.agregar_total_pedido(tabla)
 tabla = tr.agregar_numero_items(tabla)
 tabla = tr.agregar_porcentaje_item(tabla)
 tabla = tr.agregar_columnas_fecha(tabla)
 tabla = tr.agregar_indicador_venta_local(tabla)
-
 
 print(f"Tabla analítica creada: {tabla.shape[0]} filas, {tabla.shape[1]} columnas")
 
@@ -82,6 +83,7 @@ print(satisfaccion_por_estado)
 print("\n--- PEDIDOS VACÍOS ---")
 print(pedidos_vacios)
 
+
 # SANITY CHECKS
 validar_ventas_pagos = (an.validar_ventas_vs_pagos(
     orders_df,
@@ -94,7 +96,31 @@ print("\n--- VALIDACIÓN DE VENTAS VS PAGOS ---")
 print(validar_ventas_pagos)
 
 
-"""
+# 4. Inspección de tablas
+
+
+tablas = {
+    "customers": (customers_df, contracts.CUSTOMERS_PRIMARY_KEY, contracts.CUSTOMERS_COLUMNS),
+    "orders": (orders_df, contracts.ORDER_PRIMARY_KEY, contracts.ORDER_COLUMNS),
+    "order_items": (order_items_df, contracts.ORDER_ITEMS_PRIMARY_KEY, contracts.ORDER_ITEMS_COLUMNS),
+    "order_products": (order_products_df, contracts.ORDER_PRODUCTS_PRIMARY_KEY, contracts.ORDER_PRODUCTS_COLUMNS),
+    "order_payments": (order_payments_df, contracts.ORDER_PAYMENTS_PRIMARY_KEY, contracts.ORDER_PAYMENTS_COLUMNS),
+    "sellers": (sellers_df, contracts.SELLERS_PRIMARY_KEY, contracts.SELLERS_COLUMNS),
+    "order_reviews":(order_reviews_df, contracts.ORDER_REVIEWS_PRIMARY_KEY, contracts.ORDER_REVIEWS_COLUMNS)
+}
+
+todas_cumplen, resultados = verificar_contratos(tablas)
+print(resultados)
+
+
+# 5. Load
+if todas_cumplen:
+    continue
+
+
+
+
+
 
 
 

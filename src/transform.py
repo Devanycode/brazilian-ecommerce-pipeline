@@ -147,13 +147,49 @@ def conversion_a_datetime(tabla_analitica: pd.DataFrame) -> pd.DataFrame:
     tabla["order_estimated_delivery_date"] = pd.to_datetime(tabla["order_estimated_delivery_date"])
     return tabla
 
+def order_items_shipping_limit_convert_datetime(order_items_df: pd.DataFrame) -> pd.DataFrame:
+    """Convierte la columna 'shipping_limit_date' en datetime"""
+    df = order_items_df
+    df["shipping_limit_date"] = pd.to_datetime(df["shipping_limit_date"])
+    return df
+
+def order_products_convert_float_to_int(order_products_df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Convierte las columnas: 
+            'product_name_lenght'
+            'product_description_lenght', 
+            'product_photos_qty' 
+    en números enteros
+    """
+    df = order_products_df
+    df = df.astype({
+        "product_name_lenght": "Int64",
+        "product_description_lenght": "Int64",
+        "product_photos_qty": "Int64"
+        }
+    )
+    return df
+
+def order_reviews_convert_datetime(order_reviews_df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Convierte las columnas:
+            'review_creation_date'
+            'review_answer_timestamp'
+    en el tipo datetime
+    """
+    df = order_reviews_df
+    df = df.astype({
+            'review_creation_date': "datetime64[ns]",
+            'review_answer_timestamp': "datetime64[ns]"
+            }
+        )
+    return df
+
 def preparacion_order_reviews(order_reviews_df: pd.DataFrame) -> pd.DataFrame:
     """Prepara los datos de order reviews para evitar duplicados en los análisis"""
     df = order_reviews_df.copy()
     
-    # Debido a que su llave primaria es compuesta vamos a eliminar los duplicados de 'review_id'
-    df = df.drop_duplicates(subset="review_id", keep="first")
-    # Ahora vamos a agrupar todo a un mismo order_id
+    # Vamos a agrupar todo a un mismo order_id, para solucionar granularidad
     df = df.groupby("order_id").agg(
         review_score_promedio=("review_score","mean"),
         num_reviews=("review_id","count"),
