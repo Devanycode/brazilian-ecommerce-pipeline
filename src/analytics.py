@@ -219,3 +219,35 @@ def validar_ventas_vs_pagos(
     comparacion["diferencia_pct"] = (comparacion["diferencia"] / comparacion["ventas_totales"]) * 100
     
     return comparacion.sort_values("diferencia_pct", ascending=False)
+
+
+def pedidos_sin_items(
+    orders_df: pd.DataFrame, 
+    order_items_df: pd.DataFrame
+    ) -> pd.DataFrame:
+    """Compara los pedidos únicos en orders con los pedidos únicos en order_items,
+    si un pedido no está en order_items significa que es un pedido vacío""" 
+    pedidos_unicos_orders = orders_df["order_id"].nunique()
+    pedidos_unicos_order_items = order_items_df["order_id"].nunique()
+    diferencia = pedidos_unicos_orders - pedidos_unicos_order_items
+
+    return f"""Pedidos únicos en la tabla orders: {pedidos_unicos_orders}
+Pedidos únicos en la tabla order_items: {pedidos_unicos_order_items}
+Pedidos sin items {diferencia}"""
+
+
+def customer_id_rotos(
+    customers_df: pd.DataFrame, 
+    orders_df: pd.DataFrame
+    ) -> pd.DataFrame:
+    """Compara los clientes únicos en la tabla customers con 
+    los clientes únicos en la tabla orders, tratamos de ver si hay clientes 
+    que realizaron compras y no están registrados"""
+    customers_clientes_unicos = customers_df["customer_id"].nunique()
+    orders_clientes_unicos = orders_df["customer_id"].nunique()
+    diferencia = orders_clientes_unicos - customers_clientes_unicos
+    if diferencia < 0:
+        diferencia = abs(diferencia)
+    return f"""Clientes únicos en la tabla customers: {customers_clientes_unicos}
+Clientes únicos en la tabla orders: {orders_clientes_unicos}
+Clientes rotos: {diferencia}"""

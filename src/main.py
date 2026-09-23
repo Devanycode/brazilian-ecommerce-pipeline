@@ -17,91 +17,37 @@ sellers_df = extract.load_sellers(f"{DATA_PATH}/olist_sellers_dataset.csv")
 order_reviews_df = extract.load_order_reviews(f"{DATA_PATH}/olist_order_reviews_dataset.csv")
 
 
-# 2. TRANSFORM - Pipeline completo
-order_reviews_df_modified = tr.preparacion_order_reviews(order_reviews_df)
-tabla = tr.crear_tabla_analitica(
-    customers_df, 
-    orders_df, 
-    order_items_df, 
-    order_products_df,
-    order_payments_df,
-    sellers_df,
-    order_reviews_df_modified
-)
-
-# Tablas individuales 
+# 2. TRANSFORM 
 orders_df = tr.conversion_a_datetime(orders_df)
 order_items_df = tr.order_items_shipping_limit_convert_datetime(order_items_df) 
 order_products_df = tr.order_products_convert_float_to_int(order_products_df)
 order_reviews_df = tr.order_reviews_convert_datetime(order_reviews_df)
 
-# Tabla analítica 
-tabla = tr.conversion_a_datetime(tabla)
-tabla = tr.agregar_total_pedido(tabla)
-tabla = tr.agregar_numero_items(tabla)
-tabla = tr.agregar_porcentaje_item(tabla)
-tabla = tr.agregar_columnas_fecha(tabla)
-tabla = tr.agregar_indicador_venta_local(tabla)
 
-print(f"Tabla analítica creada: {tabla.shape[0]} filas, {tabla.shape[1]} columnas")
-
-# 3. ANALYTICS
-ventas_estado = an.ventas_por_estado(tabla)
-ticket_estado = an.ticket_promedio_por_estado(tabla)
-compras_mes = an.compras_por_mes(tabla)
-tiempo_entrega = an.tiempo_promedio_entrega_por_estado(tabla)
-ingresos_categoria = an.ingresos_por_categoria(tabla)
-ingresos_estados_vendedores = an.ingresos_por_estado_del_vendedor(tabla)
-ventas_locales_vs_foraneas = an.ventas_locales_vs_foraneas_por_estado(tabla)
-satisfaccion_por_estado = an.satisfaccion_por_estado(tabla)
-pedidos_vacios = an.pedidos_vacios(orders_df, order_items_df)
-
-print("\n--- TOP 5 ESTADOS POR VENTAS ---")
-print(ventas_estado.head())
-
-print("\n--- TOP 5 ESTADOS POR TICKET PROMEDIO ---")
-print(ticket_estado.head())
-
-print("\n--- COMPRAS POR MES ---")
-print(compras_mes)
-
-print("\n--- TIEMPO DE ENTREGA POR ESTADO ---")
-print(tiempo_entrega)
-
-print("\n--- INGRESOS POR CATEGORIA ---")
-print(ingresos_categoria)
-
-print("\n--- INGRESOS POR ESTADO DEL VENDEDOR ---")
-print(ingresos_estados_vendedores)
-
-print("\n--- VENTAS LOCALES VS FORÁNEAS POR ESTADO ---")
-print(ventas_locales_vs_foraneas)
-
-print("\n--- SATISFACCIÓN PROMEDIO POR ESTADO ---")
-print(satisfaccion_por_estado)
-
-print("\n--- PEDIDOS VACÍOS ---")
-print(pedidos_vacios)
-
-
-# SANITY CHECKS
+# 3. SANITY CHECKS
 validar_ventas_pagos = (an.validar_ventas_vs_pagos(
     orders_df,
     customers_df,
     order_items_df,
     order_payments_df
 ))
+pedidos_sin_items = an.pedidos_sin_items(orders_df, order_items_df)
+customer_id_rotos = an.customer_id_rotos(customers_df, orders_df)
 
 print("\n--- VALIDACIÓN DE VENTAS VS PAGOS ---")
 print(validar_ventas_pagos)
 
+print("\n--- PEDIDOS SIN ITEMS ---")
+print(pedidos_sin_items)
+
+print("\n--- CUSTOMER_ID ROTOS ---")
+print(customer_id_rotos)
+
 
 # 4. Inspección de tablas
-
-
 tablas = {
     "customers": (customers_df, contracts.CUSTOMERS_PRIMARY_KEY, contracts.CUSTOMERS_COLUMNS),
-    "orders": (orders_df, contracts.ORDER_PRIMARY_KEY, contracts.ORDER_COLUMNS),
+    "orders": (orders_df, contracts.ORDERS_PRIMARY_KEY, contracts.ORDERS_COLUMNS),
     "order_items": (order_items_df, contracts.ORDER_ITEMS_PRIMARY_KEY, contracts.ORDER_ITEMS_COLUMNS),
     "order_products": (order_products_df, contracts.ORDER_PRODUCTS_PRIMARY_KEY, contracts.ORDER_PRODUCTS_COLUMNS),
     "order_payments": (order_payments_df, contracts.ORDER_PAYMENTS_PRIMARY_KEY, contracts.ORDER_PAYMENTS_COLUMNS),
@@ -115,23 +61,5 @@ print(resultados)
 
 # 5. Load
 if todas_cumplen:
-    continue
+    pass
 
-
-
-
-
-
-
-
-
-
-
-
-####-------
-
-"""⬜ Número de pedidos únicos en orders vs número de pedidos
- únicos en order_items — debería ser casi igual. Si hay 100 pedidos en orders
-  pero solo 80 en items, hay 20 pedidos vacíos.
-⬜ Clientes únicos en customers vs clientes únicos en orders
- — si hay más en orders que en customers, hay customer_id rotos."""

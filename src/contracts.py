@@ -8,9 +8,9 @@ CUSTOMERS_COLUMNS = {
     "customer_state": "str"
 }
 
-ORDER_PRIMARY_KEY = ["order_id"]
+ORDERS_PRIMARY_KEY = ["order_id"]
 
-ORDER_COLUMNS = {
+ORDERS_COLUMNS = {
     'order_id': "str", 
     'customer_id': "str", 
     'order_status': "str", 
