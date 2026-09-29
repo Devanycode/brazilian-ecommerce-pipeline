@@ -58,6 +58,8 @@ def inspect_csv(df: pd.DataFrame, primary_key, columnas_esperadas: dict) -> dict
                 tipos_incompatibles[columna] = str(actual)
             elif tipo_esperado == "datetime" and not pd.api.types.is_datetime64_any_dtype(actual):
                 tipos_incompatibles[columna] = str(actual)
+            elif tipo_esperado == "bool" and not pd.api.types.is_bool_dtype(actual):
+                tipos_incompatibles[columna] = str(actual)
         if tipos_incompatibles:
             errores.append(f"Tipos incompatibles: {tipos_incompatibles}")
         

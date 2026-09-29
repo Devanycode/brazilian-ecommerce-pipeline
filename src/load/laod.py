@@ -31,3 +31,9 @@ def cargar_customers(customers_df):
 
     cursor.close()
     conexion.close()
+
+def cargar_orders(orders_df: pd.DataFrame):
+    conexion = establecer_conexion()
+    cursor = conexion.cursor()
+
+    pass

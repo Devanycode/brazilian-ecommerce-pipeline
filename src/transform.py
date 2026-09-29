@@ -27,7 +27,7 @@ def merge_order_items(
     return orders_customers_df.merge(
         order_items_df,
         on= "order_id",
-        how= "left",
+        how= "inner",
         validate= "one_to_many"
     )
 
@@ -54,23 +54,9 @@ def merge_order_payments(
         order_payments_df: pd.DataFrame
     ) -> pd.DataFrame:
     """Une la tabla 'order_payments' con la tabla analítica"""
-    order_payments_df = order_payments_df.copy()
-
-    # Convertimos order_payments para no tener una unión N:N
-    # Agregamos a nivel de pedido (1 fila = 1 pedido)
-    pagos_por_pedido = (
-        order_payments_df
-        .groupby("order_id", as_index=False)
-        .agg(
-            num_pagos=("payment_sequential", "count"),
-            tipo_pago_principal=("payment_type", "first"),
-            cuotas_principales=("payment_installments", "first"),
-            total_pagado=("payment_value", "sum")
-        )
-    )
 
     df = tabla_analitica.merge(
-        pagos_por_pedido,
+        order_payments_df,
         on="order_id",
         how="left",
         validate="many_to_one"
@@ -190,7 +176,7 @@ def preparacion_order_reviews(order_reviews_df: pd.DataFrame) -> pd.DataFrame:
     df = order_reviews_df.copy()
     
     # Vamos a agrupar todo a un mismo order_id, para solucionar granularidad
-    df = df.groupby("order_id").agg(
+    df = df.groupby("order_id", as_index=False).agg(
         review_score_promedio=("review_score","mean"),
         num_reviews=("review_id","count"),
         primer_titulo=("review_comment_title","first"),
@@ -201,6 +187,37 @@ def preparacion_order_reviews(order_reviews_df: pd.DataFrame) -> pd.DataFrame:
     df["primer_comentario"] = df["primer_comentario"].fillna("sin mensaje")
     return df
 
+def preparacion_order_payments(order_payments_df: pd.DataFrame) -> pd.DataFrame:
+    """Prepara la tabla order_payments eliminando problemas de granularidad
+    para unirlo con la tabla analítica"""
+    
+    # Convertimos order_payments para no tener una unión N:N
+    # Agregamos a nivel de pedido (1 fila = 1 pedido)
+    pagos_por_pedido = (
+        order_payments_df
+        .groupby("order_id", as_index=False)
+        .agg(
+            num_pagos=("payment_sequential", "count"),
+            tipo_pago_principal=("payment_type", "first"),
+            cuotas_principales=("payment_installments", "first"),
+            total_pagado=("payment_value", "sum")
+        )
+    )
+    order_payments_df = order_payments_df.copy()
+
+    return pagos_por_pedido
+
+
+def solucion_contrato_tabla_analitica(tabla_analitica: pd.DataFrame) -> pd.DataFrame:
+    """Resuelve problemas de tipo en las columnas incompatibles 
+    con el contrato esperado en la tabla analítica"""
+    df = tabla_analitica
+    df = df.astype({
+        "num_pagos": "Int64", 
+        "cuotas_principales": "Int64",
+        "num_reviews": "Int64"
+    })
+    return df
 
 # ==============================
 # Agregar Columnas 

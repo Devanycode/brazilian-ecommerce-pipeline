@@ -80,3 +80,45 @@ ORDER_REVIEWS_COLUMNS = {
     'review_creation_date': "datetime",
     'review_answer_timestamp': "datetime"
 }
+
+ORDER_REVIEWS_MODIFIED_COLUMNS = {
+    "order_id": "str",
+    "review_score_promedio": "float",
+    "num_reviews": "int",
+    "primer_titulo": "str",
+    "primer_comentario": "str"
+}
+
+ORDER_PAYMENTS_MODIFIED_COLUMNS = {
+    "order_id": "str",
+    "num_pagos": "int",
+    "tipo_pago_principal": "str",
+    "cuotas_principales": "int",
+    "total_pagado": "float"
+}
+
+COLUMNAS_AGREGADAS = {
+    "total_pedido": "float",
+    "total_items": "int",
+    "porcentaje_item": "float",
+    "nombre_mes": "str",
+    "numero_mes": "int",
+    "es_venta_local": "bool"
+}
+
+
+tabla_analitica = {
+    **CUSTOMERS_COLUMNS,
+    **ORDERS_COLUMNS,
+    **ORDER_ITEMS_COLUMNS,
+    **ORDER_PRODUCTS_COLUMNS,
+    **ORDER_PAYMENTS_MODIFIED_COLUMNS,
+    **SELLERS_COLUMNS,
+    **ORDER_REVIEWS_MODIFIED_COLUMNS,
+    **COLUMNAS_AGREGADAS
+}
+
+
+TABLA_ANALITICA_PRIMARY_KEY = ["order_id", "order_item_id"]
+
+TABLA_ANALITICA_COLUMNS = tabla_analitica
