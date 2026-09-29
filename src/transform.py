@@ -94,7 +94,7 @@ def merge_sellers(
     )
     df["seller_state"] = df["seller_state"].fillna("sin_vendedor")
     df["seller_city"] = df["seller_city"].fillna("sin_vendedor")
-    df["seller_zip_code_prefix"] = df["seller_zip_code_prefix"].fillna("00000").astype(str)
+    df["seller_zip_code_prefix"] = df["seller_zip_code_prefix"].fillna("00000")
     return df
 
 

@@ -1,6 +1,7 @@
 import contracts
 import extract
 from inspector import verificar_contratos
+import load
 import transform as tr
 
 DATA_PATH = "../data"
@@ -58,4 +59,9 @@ todas_cumplen, resultados = verificar_contratos(
     }
 )
 
-print(resultados)
+
+# 5. Load
+if todas_cumplen:
+    tabla_a_cargar = {"tabla_analitica": tabla}
+    load.cargar_tablas(tabla_a_cargar)
+    load.verificar_carga(tabla_a_cargar)

@@ -2,6 +2,7 @@ import pandas as pd
 import extract
 import contracts
 from inspector import inspect_csv, verificar_contratos
+import load
 import transform as tr
 import analytics as an
 
@@ -55,11 +56,23 @@ tablas = {
     "order_reviews":(order_reviews_df, contracts.ORDER_REVIEWS_PRIMARY_KEY, contracts.ORDER_REVIEWS_COLUMNS)
 }
 
+
+
 todas_cumplen, resultados = verificar_contratos(tablas)
-print(resultados)
 
 
 # 5. Load
 if todas_cumplen:
-    pass
+    todas_las_tablas = {
+        "customers": customers_df,
+        "orders": orders_df,
+        "order_items": order_items_df,
+        "order_products": order_products_df,
+        "order_payments": order_payments_df,
+        "sellers": sellers_df,
+        "order_reviews": order_reviews_df
+    }
+    load.cargar_tablas(todas_las_tablas)
+    load.verificar_carga(todas_las_tablas)
+
 
