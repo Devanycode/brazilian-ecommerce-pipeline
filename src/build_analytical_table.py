@@ -59,13 +59,3 @@ todas_cumplen, resultados = verificar_contratos(
 )
 
 print(resultados)
-
-"""
-Tipos incompatibles 
-seller_<ip_code_prefix int -> str (se debe convertir antes del merge)
-"""
-
-
-
-
-print(sellers_df["seller_zip_code_prefix"].dtype)
