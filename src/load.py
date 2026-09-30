@@ -25,7 +25,8 @@ url = URL.create(
 )
 engine = create_engine(url)
 
-def cargar_tablas(dataframes):
+def cargar_tablas(dataframes: dict[str:"nombre_tabla", pd.DataFrame:"tabla"]) -> None:
+    """Función para cargar cualquier tabla a mi conexión en MySQL"""
     with engine.begin() as conn:
         for nombre_tabla, df in dataframes.items():
             inicio = time.time()
