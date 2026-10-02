@@ -101,6 +101,7 @@ COLUMNAS_AGREGADAS = {
     "total_pedido": "float",
     "total_items": "int",
     "porcentaje_item": "float",
+    "año": "int",
     "nombre_mes": "str",
     "numero_mes": "int",
     "es_venta_local": "bool"

@@ -261,7 +261,8 @@ def agregar_columnas_fecha(df: pd.DataFrame) -> pd.DataFrame:
         9: "septiembre", 10: "octubre", 11: "noviembre", 12: "diciembre",
     }
 
-    df["numero_mes"] = (df["order_purchase_timestamp"].dt.month)
+    df["año"] = df["order_purchase_timestamp"].dt.year
+    df["numero_mes"] = df["order_purchase_timestamp"].dt.month
     df["nombre_mes"] = df["numero_mes"].map(MESES_ES)
 
     return df
