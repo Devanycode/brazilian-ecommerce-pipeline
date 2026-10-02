@@ -23,7 +23,7 @@ def ticket_promedio_por_estado(df: pd.DataFrame) -> pd.DataFrame:
     Calcula el ticket promedio por estado.
 
     Primero suma el valor de todos los ítems de cada pedido y,
-    posteriormente, calcula el promedio de esos pedidos para cada estado.
+    posteriormente, calcula el valor promedio de esos pedidos para cada estado.
     """
     ticket_precio = (
         df
@@ -51,15 +51,21 @@ def ticket_promedio_por_estado(df: pd.DataFrame) -> pd.DataFrame:
         )
     )
 
-def compras_por_mes(df: pd.DataFrame) -> pd.DataFrame:
-    """Devuelve el valor total de las compras por cada mes."""
+def compras_promedio_por_mes(df: pd.DataFrame) -> pd.DataFrame:
+    """Devuelve el valor promedio del total de las compras por cada mes."""
     df = df.copy()
-    df = agregar_columnas_fecha(df)
+    suma_compras_por_mes = (
+        df
+        .groupby(["numero_mes", "nombre_mes"], as_index=False)
+        .agg(total_compras_mes = ("price","sum"))
+        .sort_values(by=["numero_mes", "nombre_mes"])
+    )
+
 
     return (
-        df
-        .groupby(["numero_mes", "nombre_mes"], as_index=False)["price"]
-        .sum()
+        suma_compras_por_mes
+        .groupby(["numero_mes","nombre_mes"], as_index=False)
+        .agg(promedio_del_total_compras_mes= ["total_compras_mes", "mean"])
         .sort_values(by=["numero_mes", "nombre_mes"])
     )
 
@@ -160,22 +166,6 @@ def satisfaccion_por_estado(tabla_analitica: pd.DataFrame) -> pd.DataFrame:
 
     return df
 
-def pedidos_vacios(
-        orders_df: pd.DataFrame,
-        order_items_df: pd.DataFrame
-    ) -> pd.DataFrame:
-    """
-    Identifica pedidos en 'orders' que no tienen ningún ítem en 'order_items'.
-    """
-    pedidos_con_items = order_items_df["order_id"].unique()
-    pedidos_sin_items = orders_df[~orders_df["order_id"].isin(pedidos_con_items)]
-
-    return pd.DataFrame({
-        "total_pedidos": [len(orders_df)],
-        "pedidos_con_items": [len(pedidos_con_items)],
-        "pedidos_vacios": [len(pedidos_sin_items)],
-        "porcentaje_vacios": [round(len(pedidos_sin_items) / len(orders_df) * 100, 2)]
-    })
 
 # ===========================================================
 # SANITY CHECKS
