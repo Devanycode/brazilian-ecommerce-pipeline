@@ -56,7 +56,7 @@ def compras_promedio_por_mes(df: pd.DataFrame) -> pd.DataFrame:
     df = df.copy()
     suma_compras_por_mes = (
         df
-        .groupby(["numero_mes", "nombre_mes"], as_index=False)
+        .groupby(["año", "numero_mes", "nombre_mes"], as_index=False)
         .agg(total_compras_mes = ("price","sum"))
         .sort_values(by=["numero_mes", "nombre_mes"])
     )
@@ -65,7 +65,7 @@ def compras_promedio_por_mes(df: pd.DataFrame) -> pd.DataFrame:
     return (
         suma_compras_por_mes
         .groupby(["numero_mes","nombre_mes"], as_index=False)
-        .agg(promedio_del_total_compras_mes= ["total_compras_mes", "mean"])
+        .agg(promedio_del_total_compras_mes= ("total_compras_mes", "mean"))
         .sort_values(by=["numero_mes", "nombre_mes"])
     )
 

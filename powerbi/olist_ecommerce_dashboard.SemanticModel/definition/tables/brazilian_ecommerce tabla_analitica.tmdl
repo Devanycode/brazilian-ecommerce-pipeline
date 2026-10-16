@@ -1,0 +1,455 @@
+table 'brazilian_ecommerce tabla_analitica'
+	lineageTag: 3389bb58-f191-481f-a2f1-6dbeb234b290
+
+	column order_id
+		dataType: string
+		lineageTag: 4d7ca5db-b551-4b7c-b789-b6c86958793e
+		summarizeBy: none
+		sourceColumn: order_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column customer_id
+		dataType: string
+		lineageTag: 5f186152-68a1-46e2-b170-61745cefeafa
+		summarizeBy: none
+		sourceColumn: customer_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column order_status
+		dataType: string
+		lineageTag: da9fa00d-29e2-40ac-bb4d-0ecfe4b3d94c
+		summarizeBy: none
+		sourceColumn: order_status
+
+		annotation SummarizationSetBy = Automatic
+
+	column order_purchase_timestamp
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: bbbf9d0e-7242-4b3d-8144-c272ea680393
+		summarizeBy: none
+		sourceColumn: order_purchase_timestamp
+
+		variation Variación
+			isDefault
+			relationship: 244cd39e-fb5c-44e0-946c-0bf6488b30d8
+			defaultHierarchy: LocalDateTable_be601473-b896-400a-8021-905235213954.'Jerarquía de fechas'
+
+		annotation SummarizationSetBy = Automatic
+
+	column order_approved_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: e0f22595-4ed4-4404-89a0-593cec9a5fb0
+		summarizeBy: none
+		sourceColumn: order_approved_at
+
+		variation Variación
+			isDefault
+			relationship: 86668a58-b3d7-47bb-b44f-d8aa26333dd8
+			defaultHierarchy: LocalDateTable_6ceebd94-54b0-4dc5-b7f6-a42477ce32d6.'Jerarquía de fechas'
+
+		annotation SummarizationSetBy = Automatic
+
+	column order_delivered_carrier_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 61f512e3-3cb2-4de2-8f5c-ea4c0e593f71
+		summarizeBy: none
+		sourceColumn: order_delivered_carrier_date
+
+		variation Variación
+			isDefault
+			relationship: 3c4f21d6-33da-4a89-a34c-e1b1bca3a571
+			defaultHierarchy: LocalDateTable_eb498ac1-f12f-4858-bd1a-33ea5ea69665.'Jerarquía de fechas'
+
+		annotation SummarizationSetBy = Automatic
+
+	column order_delivered_customer_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 7171c621-2f33-49da-a9c1-0a8dea63e3e5
+		summarizeBy: none
+		sourceColumn: order_delivered_customer_date
+
+		variation Variación
+			isDefault
+			relationship: e5928c99-bbdd-479a-8663-1b8afecbec9b
+			defaultHierarchy: LocalDateTable_efcbfd17-5e6b-41b5-a484-e996fde833e2.'Jerarquía de fechas'
+
+		annotation SummarizationSetBy = Automatic
+
+	column order_estimated_delivery_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: bb75c287-006a-4694-b96c-195ad59d271d
+		summarizeBy: none
+		sourceColumn: order_estimated_delivery_date
+
+		variation Variación
+			isDefault
+			relationship: be3fcb5b-0ae8-4f75-8dd1-7a6e54bce465
+			defaultHierarchy: LocalDateTable_575070f3-5c3c-43d6-bbb5-100db5ebe890.'Jerarquía de fechas'
+
+		annotation SummarizationSetBy = Automatic
+
+	column customer_unique_id
+		dataType: string
+		lineageTag: a968e425-a41b-4b96-9568-7670662a116c
+		summarizeBy: none
+		sourceColumn: customer_unique_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column customer_zip_code_prefix
+		dataType: string
+		lineageTag: 74ff735e-ed40-469a-9199-945300ab7f5a
+		summarizeBy: none
+		sourceColumn: customer_zip_code_prefix
+
+		annotation SummarizationSetBy = Automatic
+
+	column customer_city
+		dataType: string
+		lineageTag: 3dfdd3a2-f33c-4e43-9d11-bf0f1b9f91f2
+		summarizeBy: none
+		sourceColumn: customer_city
+
+		annotation SummarizationSetBy = Automatic
+
+	column customer_state
+		dataType: string
+		lineageTag: cced25d9-c7af-42ff-8ace-3295388b2b16
+		summarizeBy: none
+		sourceColumn: customer_state
+
+		annotation SummarizationSetBy = Automatic
+
+	column order_item_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 32b520df-786d-44c7-b5ac-e8b93ed10172
+		summarizeBy: sum
+		sourceColumn: order_item_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column product_id
+		dataType: string
+		lineageTag: d95ca828-72f8-4575-8600-aa14595c5b8a
+		summarizeBy: none
+		sourceColumn: product_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column seller_id
+		dataType: string
+		lineageTag: 81536f86-edb1-43ba-bd2e-5dfa05b982d8
+		summarizeBy: none
+		sourceColumn: seller_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column shipping_limit_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 2d0284ec-585c-401a-a7ca-eb81b76d6f73
+		summarizeBy: none
+		sourceColumn: shipping_limit_date
+
+		variation Variación
+			isDefault
+			relationship: bacc90d6-3009-406f-a191-c50d07d28b32
+			defaultHierarchy: LocalDateTable_5addf776-d6bc-410f-bd5c-ed6f4fb45fd2.'Jerarquía de fechas'
+
+		annotation SummarizationSetBy = Automatic
+
+	column price
+		dataType: double
+		lineageTag: 4396e80c-019c-42d4-bbab-c7d32fd7b7f9
+		summarizeBy: sum
+		sourceColumn: price
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column freight_value
+		dataType: double
+		lineageTag: fa4a66b8-1105-463e-89d7-94e037d1186c
+		summarizeBy: sum
+		sourceColumn: freight_value
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column product_category_name
+		dataType: string
+		lineageTag: f513dd0b-f369-457b-b4a6-135e08fe919e
+		summarizeBy: none
+		sourceColumn: product_category_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column product_name_lenght
+		dataType: int64
+		formatString: 0
+		lineageTag: 55555c2f-31d2-4796-895e-fe62e8b22ad0
+		summarizeBy: sum
+		sourceColumn: product_name_lenght
+
+		annotation SummarizationSetBy = Automatic
+
+	column product_description_lenght
+		dataType: int64
+		formatString: 0
+		lineageTag: 0e7cd748-8532-4bf0-9db3-f503ef894cf3
+		summarizeBy: sum
+		sourceColumn: product_description_lenght
+
+		annotation SummarizationSetBy = Automatic
+
+	column product_photos_qty
+		dataType: int64
+		formatString: 0
+		lineageTag: 29a7b267-d060-4697-955f-6c6666dd4f21
+		summarizeBy: sum
+		sourceColumn: product_photos_qty
+
+		annotation SummarizationSetBy = Automatic
+
+	column product_weight_g
+		dataType: double
+		lineageTag: 4050208c-d852-47df-8153-a8ff027ee3cd
+		summarizeBy: sum
+		sourceColumn: product_weight_g
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column product_length_cm
+		dataType: double
+		lineageTag: 00b3f6e2-fe4d-499f-b9bc-33decb90d440
+		summarizeBy: sum
+		sourceColumn: product_length_cm
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column product_height_cm
+		dataType: double
+		lineageTag: 5b3e4e9e-9e05-4cd7-9302-9bdf5b5161e0
+		summarizeBy: sum
+		sourceColumn: product_height_cm
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column product_width_cm
+		dataType: double
+		lineageTag: feea26df-ae5e-4abc-999f-88c03937f74d
+		summarizeBy: sum
+		sourceColumn: product_width_cm
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column num_pagos
+		dataType: int64
+		formatString: 0
+		lineageTag: 33782438-4da5-4bc5-868b-7eb91baa3c8d
+		summarizeBy: sum
+		sourceColumn: num_pagos
+
+		annotation SummarizationSetBy = Automatic
+
+	column tipo_pago_principal
+		dataType: string
+		lineageTag: 8b3a1f45-a7a3-4267-ba59-9acc90a6ca4c
+		summarizeBy: none
+		sourceColumn: tipo_pago_principal
+
+		annotation SummarizationSetBy = Automatic
+
+	column cuotas_principales
+		dataType: int64
+		formatString: 0
+		lineageTag: e9de7fce-e7e1-42d7-bc60-e9742d701299
+		summarizeBy: sum
+		sourceColumn: cuotas_principales
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_pagado
+		dataType: double
+		lineageTag: ff000208-b8d2-49b7-8e97-c35d3a0992b5
+		summarizeBy: sum
+		sourceColumn: total_pagado
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column seller_zip_code_prefix
+		dataType: string
+		lineageTag: fb1d560e-1394-4216-b9b8-23c50d432894
+		summarizeBy: none
+		sourceColumn: seller_zip_code_prefix
+
+		annotation SummarizationSetBy = Automatic
+
+	column seller_city
+		dataType: string
+		lineageTag: f74a3967-a2f2-476d-8a2d-10d88c4c1d47
+		summarizeBy: none
+		sourceColumn: seller_city
+
+		annotation SummarizationSetBy = Automatic
+
+	column seller_state
+		dataType: string
+		lineageTag: 95f478ea-5f9f-4f02-a97c-63ab2018ca9c
+		summarizeBy: none
+		sourceColumn: seller_state
+
+		annotation SummarizationSetBy = Automatic
+
+	column review_score_promedio
+		dataType: double
+		lineageTag: 9c0375b1-de66-4a1b-8b42-a2860d469ea7
+		summarizeBy: sum
+		sourceColumn: review_score_promedio
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column num_reviews
+		dataType: int64
+		formatString: 0
+		lineageTag: 79c68f7b-b085-4902-a08d-c08b75f6d40e
+		summarizeBy: sum
+		sourceColumn: num_reviews
+
+		annotation SummarizationSetBy = Automatic
+
+	column primer_titulo
+		dataType: string
+		lineageTag: 9a0d7004-3a39-482e-b393-4260f94d0b3c
+		summarizeBy: none
+		sourceColumn: primer_titulo
+
+		annotation SummarizationSetBy = Automatic
+
+	column primer_comentario
+		dataType: string
+		lineageTag: d82e1aeb-9b83-4811-83ae-96ad668c7cc6
+		summarizeBy: none
+		sourceColumn: primer_comentario
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_pedido
+		dataType: double
+		formatString: 0
+		lineageTag: 3ab7435c-bad6-4872-a81d-dcc4e18a181a
+		summarizeBy: sum
+		sourceColumn: total_pedido
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_items
+		dataType: int64
+		formatString: 0
+		lineageTag: 416ba4db-2890-4758-9084-075ce9ecef7c
+		summarizeBy: sum
+		sourceColumn: total_items
+
+		annotation SummarizationSetBy = Automatic
+
+	column porcentaje_item
+		dataType: double
+		lineageTag: f76d4ed5-4ff8-4252-9a37-13cd56050eab
+		summarizeBy: sum
+		sourceColumn: porcentaje_item
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column nombre_mes
+		dataType: string
+		lineageTag: 9d16d4bd-9fd5-4d29-ac4d-bae6cdf97e9d
+		summarizeBy: none
+		sourceColumn: nombre_mes
+		sortByColumn: numero_mes
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column numero_mes
+		dataType: int64
+		formatString: 0
+		lineageTag: 2d4de7e6-d9bb-4870-9b0b-08e0d42b461a
+		summarizeBy: sum
+		sourceColumn: numero_mes
+
+		annotation SummarizationSetBy = Automatic
+
+	column es_venta_local
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: a4ade5f3-523a-41e2-b6f5-2b8547bd8d88
+		summarizeBy: none
+		sourceColumn: es_venta_local
+
+		annotation SummarizationSetBy = Automatic
+
+	column dias_entrega = DATEDIFF([order_approved_at], [order_delivered_customer_date], DAY)
+		formatString: 0
+		lineageTag: cbce2559-a14f-487f-bab6-ec1db8b9e186
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Cumplimiento Entrega' = ```
+			
+			        SWITCH(
+			            TRUE(),
+			            ISBLANK([order_estimated_delivery_date]) || ISBLANK([order_delivered_customer_date]), "sin fecha de entrega",
+			            DATEDIFF([order_estimated_delivery_date], [order_delivered_customer_date], DAY) > 0, "despues de tiempo",
+			            DATEDIFF([order_estimated_delivery_date], [order_delivered_customer_date], DAY) = 0, "mismo dia",
+			            "antes de tiempo"
+			        )
+			```
+		lineageTag: 79b9e756-1f58-45d9-befb-a9836ffbe8da
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column año = SWITCH(TRUE(), ISBLANK([order_approved_at]), BLANK(), YEAR([order_approved_at]))
+		formatString: 0
+		lineageTag: 3954127e-b000-4f09-8674-c56a54784b97
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'brazilian_ecommerce tabla_analitica' = m
+		mode: import
+		source =
+				let
+				    Origen = MySQL.Database("localhost:3306", "brazilian_ecommerce", [ReturnSingleDatabase=true]),
+				    brazilian_ecommerce_tabla_analitica = Origen{[Schema="brazilian_ecommerce",Item="tabla_analitica"]}[Data]
+				in
+				    brazilian_ecommerce_tabla_analitica
+
+	annotation PBI_ResultType = Table
+

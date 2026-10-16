@@ -1,0 +1,27 @@
+model Model
+	culture: es-CO
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: es-CO
+	valueFilterBehavior: independent
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_QueryOrder = ["brazilian_ecommerce tabla_analitica","Medidas"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table 'brazilian_ecommerce tabla_analitica'
+ref table DateTableTemplate_f6a71f45-ada6-4f50-9eeb-8cd196d927cd
+ref table LocalDateTable_be601473-b896-400a-8021-905235213954
+ref table LocalDateTable_6ceebd94-54b0-4dc5-b7f6-a42477ce32d6
+ref table LocalDateTable_eb498ac1-f12f-4858-bd1a-33ea5ea69665
+ref table LocalDateTable_efcbfd17-5e6b-41b5-a484-e996fde833e2
+ref table LocalDateTable_575070f3-5c3c-43d6-bbb5-100db5ebe890
+ref table LocalDateTable_5addf776-d6bc-410f-bd5c-ed6f4fb45fd2
+ref table Medidas
+
+ref cultureInfo es-CO
+
