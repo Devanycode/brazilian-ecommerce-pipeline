@@ -37,9 +37,9 @@ Este documento centraliza la lógica de negocio y las fórmulas DAX desarrollada
 ```dax
 
 Ingresos Totales =
-	SUM(
-	    'brazilian_ecommerce tabla_analitica'[price]
-	)
+    SUM(
+        'brazilian_ecommerce tabla_analitica'[price]
+    )
 
 ```
 > **Nota de Desarrollo:**
@@ -50,9 +50,9 @@ Ingresos Totales =
 ```dax
 
 Pedidos Totales =
-	DISTINCTCOUNT(
-	    'brazilian_ecommerce tabla_analitica'[order_id]
-	)
+    DISTINCTCOUNT(
+        'brazilian_ecommerce tabla_analitica'[order_id]
+    )
 
 ```
 > **Nota de Desarrollo:**
@@ -64,9 +64,9 @@ Pedidos Totales =
 ```dax
 
 Ticket Promedio =
-	DIVIDE(
-		[Ingresos Totales], [Pedidos Totales]
-	)
+    DIVIDE(
+        [Ingresos Totales], [Pedidos Totales]
+    )
 
 ```
 
@@ -75,36 +75,36 @@ Ticket Promedio =
 ```dax
 
 Tiempo Promedio de Entrega =
-	AVERAGEX(
-	    DISTINCT(
-	        'brazilian_ecommerce tabla_analitica'[order_id]),
-	    CALCULATE(
-	        AVERAGE(
-	            'brazilian_ecommerce tabla_analitica'[Dias Entrega]
-	        )
-	    )
-	)
+    AVERAGEX(
+        DISTINCT(
+            'brazilian_ecommerce tabla_analitica'[order_id]),
+        CALCULATE(
+            AVERAGE(
+                'brazilian_ecommerce tabla_analitica'[Dias Entrega]
+            )
+        )
+    )
 
 ```
 
 > **Notas de desarrollo**
 - **Optimización del grano:** Si un pedido contiene 5 productos, la tabla analítica presenta 5 filas repetidas con el mismo `order_id`. Un `AVERAGE` directo duplicaría el peso de ese pedido en el reporte.
-- **Preservación de Linaje:** Aunque `DISTINCT` genera una lista virtual de una sola columna, esta conserva su linaje de datos nativo. Esto permite que `CALCULATE` realice la transición de contexto y use un filtro automático sobre la tabla completa, simulando un comportamiento de `GROUP BY` dinámico, asegurando que el promedio de `dias_entrega` se evalúe de manera aislada para cada orden antes de promediar el total general.
+- **Preservación de Linaje:** Aunque `DISTINCT` genera una lista virtual de una sola columna, esta conserva su linaje de datos nativo. Esto permite que `CALCULATE` realice la transición de contexto y use un filtro automático sobre la tabla completa, simulando un comportamiento de `GROUP BY` dinámico, asegurando que el promedio de `Dias Entrega` se evalúe de manera aislada para cada orden antes de promediar el total general.
 
 ### Satisfacción Promedio
 
 ```dax
 
 Satisfaccion Promedio = 
-	AVERAGEX(
-		DISTINCT('brazilian_ecommerce tabla_analitica'[order_id]),
-		CALCULATE(
-			AVERAGE(
-				'brazilian_ecommerce tabla_analitica'[review_score_promedio]
-			)
-		)
-	)
-	
+    AVERAGEX(
+        DISTINCT('brazilian_ecommerce tabla_analitica'[order_id]),
+        CALCULATE(
+            AVERAGE(
+                'brazilian_ecommerce tabla_analitica'[review_score_promedio]
+            )
+        )
+    )
+    
 ```
 
 > **Notas de Desarrollo:**
@@ -115,10 +115,11 @@ Satisfaccion Promedio =
 
 ```dax
 Porcentaje de Entregas a Tiempo = 
-	DIVIDE(
-		[total entregas a tiempo], 
-		[conteo pedidos entregados] 
-	)
+    DIVIDE(
+        [Total Entregas a Tiempo], 
+        [Conteo Pedidos Entregados],
+        0
+    )
 ```
 > **Nota de desarrollo:**
 + Para el cálculo se toma en cuenta únicamente los pedidos que ya fueron entregados, para evitar hacer cálculos con valores nulos.
@@ -129,11 +130,11 @@ Porcentaje de Entregas a Tiempo =
 ### Dias Entrega
 ```dax
 Dias Entrega = 
-	DATEDIFF(
-		[order_purchase_timestamp], 
-		[order_delivered_customer_date], 
-		DAY
-	)
+    DATEDIFF(
+        [order_purchase_timestamp], 
+        [order_delivered_customer_date], 
+        DAY
+    )
 ```
 > **Nota de Desarrollo:**
 - Es la diferencia en días desde que se creó la orden de pedido hasta que el pedido fue entregado al cliente.
@@ -173,33 +174,32 @@ Cumplimiento Entrega =
 
 ```dax
 Total Entregas a Tiempo = 
-	CALCULATE(
-	    DISTINCTCOUNT('brazilian_ecommerce tabla_analitica'[order_id]),
-	    'brazilian_ecommerce tabla_analitica'[Cumplimiento Entrega] = 
-	    "mismo dia"           
-	    ||
-		'brazilian_ecommerce tabla_analitica'[Cumplimiento Entrega] = 
-		"antes de tiempo"
-	)
+    CALCULATE(
+        DISTINCTCOUNT('brazilian_ecommerce tabla_analitica'[order_id]),
+        'brazilian_ecommerce tabla_analitica'[Cumplimiento Entrega] = 
+        "mismo dia"           
+        ||
+        'brazilian_ecommerce tabla_analitica'[Cumplimiento Entrega] = 
+        "antes de tiempo"
+    )
 ```
 
 ### Conteo Pedidos Entregados
 
 ```dax
 Conteo Pedidos Entregados = 
-	CALCULATE(
-	    DISTINCTCOUNT('brazilian_ecommerce tabla_analitica'[order_id]),
-	    'brazilian_ecommerce tabla_analitica'[Cumplimiento Entrega] <> 
-	    "sin fecha de entrega"
-	)
+    CALCULATE(
+        DISTINCTCOUNT('brazilian_ecommerce tabla_analitica'[order_id]),
+        'brazilian_ecommerce tabla_analitica'[Cumplimiento Entrega] <> 
+        "sin fecha de entrega"
+    )
 ```
 
 ### Conteo Items Vendidos
 
 ```dax
 Conteo Items Vendidos = 
-	COUNT(
-		'brazilian_ecommerce tabla_analitica'[order_item_id]
-	)
+    COUNT(
+        'brazilian_ecommerce tabla_analitica'[order_item_id]
+    )
 ```
-
