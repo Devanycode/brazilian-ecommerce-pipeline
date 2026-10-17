@@ -142,23 +142,24 @@ Dias Entrega =
 
 ```dax
 Cumplimiento Entrega =
-    SWITCH(
-        TRUE(),
-		ISBLANK([order_estimated_delivery_date]) ||                                        ISBLANK([order_delivered_customer_date]),
-	    "sin fecha de entrega",
-        DATEDIFF(
-	        [order_estimated_delivery_date], 
-	        [order_delivered_customer_date], 
-	        DAY
-	    ) > 0, 
-	    "despues de tiempo",
-        DATEDIFF(
-	        [order_estimated_delivery_date], 
-	        [order_delivered_customer_date], 
-	        DAY
-	    ) = 0, 
-	    "mismo dia",
-        "antes de tiempo"
+    SWITCH(
+        TRUE(),
+        ISBLANK([order_estimated_delivery_date])
+            || ISBLANK([order_delivered_customer_date]),
+        "sin fecha de entrega",
+        DATEDIFF(
+            [order_estimated_delivery_date],
+            [order_delivered_customer_date],
+            DAY
+        ) > 0,
+        "despues de tiempo",
+        DATEDIFF(
+            [order_estimated_delivery_date],
+            [order_delivered_customer_date],
+            DAY
+        ) = 0,
+        "mismo dia",
+        "antes de tiempo"
     )
 ```
 > **Notas de Negocio:**
