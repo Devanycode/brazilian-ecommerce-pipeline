@@ -6,17 +6,17 @@ Este documento centraliza la lógica de negocio y las fórmulas DAX desarrollada
 
 | Nombre                            | Tipo                | Descripción Corta                                                                      |
 | --------------------------------- | ------------------- | -------------------------------------------------------------------------------------- |
-| Ingresos Totales                  | KPI (medida)        | Suma total de todas las compr                                                          |
-| Pedidos Totales                   | KPI (medida)        | Conteo del total de pedidos ún                                                         |
-| Ticket Promedio                   | KPI (medida)        | Valor promedio de cada com                                                             |
-| Tiempo Promedio de Entrega (Días) | KPI (medida)        | Tiempo promedio que tarda un pedido en ser entregado desde que se crea la orden  que   |
+| Ingresos Totales                  | KPI (medida)        | Suma total de todas las compras                                                          |
+| Pedidos Totales                   | KPI (medida)        | Conteo del total de pedidos                                                         |
+| Ticket Promedio                   | KPI (medida)        | Valor promedio de cada compra                                                             |
+| Tiempo Promedio de Entrega (Días) | KPI (medida)        | Tiempo promedio que tarda un pedido en ser entregado desde que se crea la orden   |
 | Satisfacción Promedio             | KPI (medida)        | En base a las encuestas mide la calificación promedio que le dan a un pedido           |
 | Porcentaje de Entregas a Tiempo   | KPI (medida)        | Porcentaje de los pedidos que se entregaron dentro del rango de tiempo estimado        |
 | Días Entrega                      | Columna Calculada   | Diferencia en días desde que la orden de un pedido es creada y se entrega el pedido    |
 | Cumplimiento Entrega              | Columna Calculada   | Categoriza los pedidos en base a si cumplieron o no con su tiempo estimado de entrega  |
-| Total Entregas a Tiempo           | Métrica de Contexto | Cuenta el total de pedidos que se entregaron en el rango de tiempo estimado            |
-| Conteo Pedidos Entregados         | Métrica de Contexto | Cuenta el total de pedidos que ya fueron entregados                                    |
-| Conteo Items Vendidos             | Métrica de Contexto | Cuenta el total de ítems vendidos                                                      |
+| Total Entregas a Tiempo           | Medida Auxiliar | Cuenta el total de pedidos que se entregaron en el rango de tiempo estimado            |
+| Conteo Pedidos Entregados         | Medida Auxiliar | Cuenta el total de pedidos que ya fueron entregados                                    |
+| Conteo Items Vendidos             | Medida Auxiliar | Cuenta el total de ítems vendidos                                                      |
 
 ---
 ## KPIs
@@ -26,27 +26,24 @@ Este documento centraliza la lógica de negocio y las fórmulas DAX desarrollada
 ```dax
 
 Ingresos Totales =
-
-SUM(
-
-    'brazilian_ecommerce tabla_analitica'[price]
-
-)
+	SUM(
+	    'brazilian_ecommerce tabla_analitica'[price]
+	)
 
 ```
+> **Nota de Desarrollo:**
+- Estos son los ingresos totales basados únicamente en el precio de los productos, sin incluir el valor del envío.
 
 ### Pedidos Totales
 
 ```dax
 
 Pedidos Totales =
-
-DISTINCTCOUNT(
-
-    'brazilian_ecommerce tabla_analitica'[order_id]
-
-)
-
+	DISTINCTCOUNT(
+	    'brazilian_ecommerce tabla_analitica'[order_id]
+	)
+> **Nota de Desarrollo:**
+- Cuenta únicamente los pedidos que no son vacíos y tienen al menos un ítem.
 ```
 
 ### Ticket Promedio
@@ -54,10 +51,9 @@ DISTINCTCOUNT(
 ```dax
 
 Ticket Promedio =
-
-[ventas totales] /
-
-[Pedidos Totales]
+	DIVIDE(
+		[Ingresos Totales], [Pedidos Totales]
+	)
 
 ```
 
@@ -71,7 +67,7 @@ Tiempo Promedio de Entrega =
 	        'brazilian_ecommerce tabla_analitica'[order_id]),
 	    CALCULATE(
 	        AVERAGE(
-	            'brazilian_ecommerce tabla_analitica'[dias_entrega]
+	            'brazilian_ecommerce tabla_analitica'[Dias Entrega]
 	        )
 	    )
 	)
@@ -109,7 +105,6 @@ Porcentaje de Entregas a Tiempo =
 	DIVIDE(
 		[total entregas a tiempo], 
 		[conteo pedidos entregados], 
-		0
 	)
 ```
 > **Nota de desarrollo:**
@@ -138,29 +133,27 @@ Cumplimiento Entrega =
         TRUE(),
 		ISBLANK([order_estimated_delivery_date]) ||                                        ISBLANK([order_delivered_customer_date]),
 	    "sin fecha de entrega",
-
         DATEDIFF(
 	        [order_estimated_delivery_date], 
 	        [order_delivered_customer_date], 
 	        DAY
 	    ) > 0, 
 	    "despues de tiempo",
-
         DATEDIFF(
 	        [order_estimated_delivery_date], 
 	        [order_delivered_customer_date], 
 	        DAY
 	    ) = 0, 
 	    "mismo dia",
-
         "antes de tiempo"
-
     )
 ```
 > **Notas de Negocio:**
 - Esta columna está categorizada en base a si se cumple o no con los tiempos estimados de entrega.
 - Se usa `ISBLANK` para categorizar también esos pedidos que fueron cancelados o que no han sido entregados.
-## Métrica de Contexto
+
+--- 
+## Medidas Auxiliares
 
 ### Total Entregas a Tiempo
 
@@ -187,7 +180,7 @@ Conteo Pedidos Entregados =
 	)
 ```
 
-### Cantidad Items Vendidos
+### Conteo Items Vendidos
 
 ```dax
 Conteo Items Vendidos = 
