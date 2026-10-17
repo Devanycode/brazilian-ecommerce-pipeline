@@ -2,10 +2,10 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
   "metadata": {
     "type": "SemanticModel",
-    "displayName": "olist_ecommerce_dashboard"
+    "displayName": "dashboard_olist"
   },
   "config": {
     "version": "2.0",
-    "logicalId": "87e939ca-bee9-4bbb-aea4-033ced08ec7c"
+    "logicalId": "49e6c741-1733-49be-a6aa-7d9f819f7bed"
   }
 }

@@ -22,7 +22,7 @@ table Medidas
 	measure 'Tiempo Promedio de Entrega' =
 			AVERAGEX(
 			    DISTINCT('brazilian_ecommerce tabla_analitica'[order_id]),
-			    CALCULATE(AVERAGE('brazilian_ecommerce tabla_analitica'[dias_entrega]))
+			    CALCULATE(AVERAGE('brazilian_ecommerce tabla_analitica'[Dias Entrega]))
 			    )
 		lineageTag: ad5a4189-74ed-47b3-90cd-9e17731d2bd5
 
@@ -37,7 +37,7 @@ table Medidas
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
-	measure 'total entregas a tiempo' = ```
+	measure 'Total Entregas a Tiempo' = ```
 			CALCULATE(
 			    DISTINCTCOUNT('brazilian_ecommerce tabla_analitica'[order_id]),
 			    'brazilian_ecommerce tabla_analitica'[Cumplimiento Entrega] = "mismo dia" || 
@@ -47,7 +47,7 @@ table Medidas
 		formatString: 0
 		lineageTag: 5e5bb72a-06ee-42f2-8213-a58991927a57
 
-	measure 'conteo pedidos entregados' =
+	measure 'Conteo Pedidos Entregados' =
 			CALCULATE(
 			    DISTINCTCOUNT('brazilian_ecommerce tabla_analitica'[order_id]),
 			    'brazilian_ecommerce tabla_analitica'[Cumplimiento Entrega] <> "sin fecha de entrega"
@@ -56,29 +56,13 @@ table Medidas
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
-	measure 'porcentaje de entregas a tiempo' = DIVIDE([total entregas a tiempo], [conteo pedidos entregados], 0)
+	measure 'Porcentaje de Entregas a Tiempo' = DIVIDE([Total Entregas a Tiempo], [Conteo Pedidos Entregados], 0)
 		formatString: 0.0\ %;-0.0\ %;0.0\ %
 		lineageTag: f28c5b66-865e-42d7-b0e5-0c4aff411ebb
 
-	measure 'Objetivo entrega' = 0.90
-		lineageTag: 36684732-e531-43ce-96f0-77fe40ba0f91
-
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
-
-	measure 'Cantidad Items' = COUNT('brazilian_ecommerce tabla_analitica'[order_item_id])
+	measure 'Conteo Items Vendidos' = COUNT('brazilian_ecommerce tabla_analitica'[order_item_id])
 		formatString: 0
 		lineageTag: db3106e6-e330-4880-899e-dc449a8a58db
-
-	measure 'Etiquetas Top 10' = ```
-			
-			IF(
-			    RANKX(ALL('brazilian_ecommerce tabla_analitica'[product_category_name]), [Ventas Totales], , DESC) <= 10,
-			    SELECTEDVALUE('brazilian_ecommerce tabla_analitica'[product_category_name]),
-			    BLANK()
-			)
-			
-			```
-		lineageTag: ce5e5cd6-1a70-4453-bf20-aac903a6428e
 
 	column Columna1
 		dataType: string

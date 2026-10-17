@@ -5734,7 +5734,7 @@ cultureInfo es-CO
 			      "Definition": {
 			        "Binding": {
 			          "ConceptualEntity": "brazilian_ecommerce tabla_analitica",
-			          "ConceptualProperty": "dias_entrega"
+			          "ConceptualProperty": "Dias Entrega"
 			        }
 			      },
 			      "State": "Generated",
@@ -5863,27 +5863,11 @@ cultureInfo es-CO
 			        }
 			      ]
 			    },
-			    "brazilian_ecommerce_tabla_analitica.año": {
-			      "Definition": {
-			        "Binding": {
-			          "ConceptualEntity": "brazilian_ecommerce tabla_analitica",
-			          "ConceptualProperty": "año"
-			        }
-			      },
-			      "State": "Generated",
-			      "Terms": [
-			        {
-			          "año": {
-			            "State": "Generated"
-			          }
-			        }
-			      ]
-			    },
 			    "medida.total_entregas_a_tiempo": {
 			      "Definition": {
 			        "Binding": {
 			          "ConceptualEntity": "Medidas",
-			          "ConceptualProperty": "total entregas a tiempo"
+			          "ConceptualProperty": "Total Entregas a Tiempo"
 			        }
 			      },
 			      "State": "Generated",
@@ -5919,7 +5903,7 @@ cultureInfo es-CO
 			      "Definition": {
 			        "Binding": {
 			          "ConceptualEntity": "Medidas",
-			          "ConceptualProperty": "conteo pedidos entregados"
+			          "ConceptualProperty": "Conteo Pedidos Entregados"
 			        }
 			      },
 			      "State": "Generated",
@@ -5935,7 +5919,7 @@ cultureInfo es-CO
 			      "Definition": {
 			        "Binding": {
 			          "ConceptualEntity": "Medidas",
-			          "ConceptualProperty": "porcentaje de entregas a tiempo"
+			          "ConceptualProperty": "Porcentaje de Entregas a Tiempo"
 			        }
 			      },
 			      "State": "Generated",
@@ -5947,27 +5931,11 @@ cultureInfo es-CO
 			        }
 			      ]
 			    },
-			    "medida.objetivo_entrega": {
-			      "Definition": {
-			        "Binding": {
-			          "ConceptualEntity": "Medidas",
-			          "ConceptualProperty": "Objetivo entrega"
-			        }
-			      },
-			      "State": "Generated",
-			      "Terms": [
-			        {
-			          "objetivo entrega": {
-			            "State": "Generated"
-			          }
-			        }
-			      ]
-			    },
 			    "medida.cantidad_items": {
 			      "Definition": {
 			        "Binding": {
 			          "ConceptualEntity": "Medidas",
-			          "ConceptualProperty": "Cantidad Items"
+			          "ConceptualProperty": "Conteo Items Vendidos"
 			        }
 			      },
 			      "State": "Generated",
@@ -6085,82 +6053,6 @@ cultureInfo es-CO
 			              "Agent": "PowerBI.VisualColumnRename"
 			            },
 			            "Weight": 0.9
-			          }
-			        }
-			      ]
-			    },
-			    "medida.etiquetas_top_10": {
-			      "Definition": {
-			        "Binding": {
-			          "ConceptualEntity": "Medidas",
-			          "ConceptualProperty": "Etiquetas Top 10"
-			        }
-			      },
-			      "State": "Generated",
-			      "Terms": [
-			        {
-			          "etiquetas top 10": {
-			            "State": "Generated"
-			          }
-			        },
-			        {
-			          "etiqueta best 10": {
-			            "Type": "Noun",
-			            "State": "Suggested",
-			            "Source": {
-			              "Agent": "Thesaurus"
-			            },
-			            "Weight": 0.591
-			          }
-			        },
-			        {
-			          "etiqueta first 10": {
-			            "Type": "Noun",
-			            "State": "Suggested",
-			            "Source": {
-			              "Agent": "Thesaurus"
-			            },
-			            "Weight": 0.591
-			          }
-			        },
-			        {
-			          "etiqueta leading 10": {
-			            "Type": "Noun",
-			            "State": "Suggested",
-			            "Source": {
-			              "Agent": "Thesaurus"
-			            },
-			            "Weight": 0.591
-			          }
-			        },
-			        {
-			          "etiqueta maximum 10": {
-			            "Type": "Noun",
-			            "State": "Suggested",
-			            "Source": {
-			              "Agent": "Thesaurus"
-			            },
-			            "Weight": 0.591
-			          }
-			        },
-			        {
-			          "etiqueta peak 10": {
-			            "Type": "Noun",
-			            "State": "Suggested",
-			            "Source": {
-			              "Agent": "Thesaurus"
-			            },
-			            "Weight": 0.591
-			          }
-			        },
-			        {
-			          "etiqueta upper 10": {
-			            "Type": "Noun",
-			            "State": "Suggested",
-			            "Source": {
-			              "Agent": "Thesaurus"
-			            },
-			            "Weight": 0.591
 			          }
 			        }
 			      ]

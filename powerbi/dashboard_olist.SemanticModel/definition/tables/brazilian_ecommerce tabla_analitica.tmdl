@@ -413,7 +413,7 @@ table 'brazilian_ecommerce tabla_analitica'
 
 		annotation SummarizationSetBy = Automatic
 
-	column dias_entrega = DATEDIFF([order_approved_at], [order_delivered_customer_date], DAY)
+	column 'Dias Entrega' = DATEDIFF([order_purchase_timestamp], [order_delivered_customer_date], DAY)
 		formatString: 0
 		lineageTag: cbce2559-a14f-487f-bab6-ec1db8b9e186
 		summarizeBy: sum
@@ -432,13 +432,6 @@ table 'brazilian_ecommerce tabla_analitica'
 			```
 		lineageTag: 79b9e756-1f58-45d9-befb-a9836ffbe8da
 		summarizeBy: none
-
-		annotation SummarizationSetBy = Automatic
-
-	column año = SWITCH(TRUE(), ISBLANK([order_approved_at]), BLANK(), YEAR([order_approved_at]))
-		formatString: 0
-		lineageTag: 3954127e-b000-4f09-8674-c56a54784b97
-		summarizeBy: sum
 
 		annotation SummarizationSetBy = Automatic
 

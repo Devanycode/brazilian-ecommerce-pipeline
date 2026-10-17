@@ -23,7 +23,7 @@
                       "Entity": "Medidas"
                     }
                   },
-                  "Property": "porcentaje de entregas a tiempo"
+                  "Property": "Porcentaje de Entregas a Tiempo"
                 }
               },
               "queryRef": "Medidas.porcentaje de entregas a tiempo",
@@ -43,7 +43,7 @@
                     "Entity": "Medidas"
                   }
                 },
-                "Property": "porcentaje de entregas a tiempo"
+                "Property": "Porcentaje de Entregas a Tiempo"
               }
             },
             "direction": "Descending"
