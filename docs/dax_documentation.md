@@ -12,11 +12,22 @@ Este documento centraliza la lógica de negocio y las fórmulas DAX desarrollada
 | Tiempo Promedio de Entrega (Días) | KPI (medida)        | Tiempo promedio que tarda un pedido en ser entregado desde que se crea la orden   |
 | Satisfacción Promedio             | KPI (medida)        | En base a las encuestas mide la calificación promedio que le dan a un pedido           |
 | Porcentaje de Entregas a Tiempo   | KPI (medida)        | Porcentaje de los pedidos que se entregaron dentro del rango de tiempo estimado        |
-| Días Entrega                      | Columna Calculada   | Diferencia en días desde que la orden de un pedido es creada y se entrega el pedido    |
+| Dias Entrega                      | Columna Calculada   | Diferencia en días desde que la orden de un pedido es creada y se entrega el pedido    |
 | Cumplimiento Entrega              | Columna Calculada   | Categoriza los pedidos en base a si cumplieron o no con su tiempo estimado de entrega  |
 | Total Entregas a Tiempo           | Medida Auxiliar | Cuenta el total de pedidos que se entregaron en el rango de tiempo estimado            |
 | Conteo Pedidos Entregados         | Medida Auxiliar | Cuenta el total de pedidos que ya fueron entregados                                    |
 | Conteo Items Vendidos             | Medida Auxiliar | Cuenta el total de ítems vendidos                                                      |
+
+---
+## Contexto de Reporte
+
+> Filtro avanzado sobre `order_purchase_timestamp`: desde el **01/01/2017** hasta el **31/08/2018**, en todas las páginas.
+
+> **Razón:** Los meses fuera de ese rango tienen muy pocos pedidos y distorsionan tendencias y promedios.
+
+> **Efecto:** Todas las medidas se calculan dentro de ese período. 
+
+> **Dónde Cambiarlo:** Panel Filtros → “Filtros en todas las páginas" y también modificando el filtro de año para poder analizar el año 2016.
 
 ---
 ## KPIs
@@ -42,9 +53,10 @@ Pedidos Totales =
 	DISTINCTCOUNT(
 	    'brazilian_ecommerce tabla_analitica'[order_id]
 	)
+```
 > **Nota de Desarrollo:**
 - Cuenta únicamente los pedidos que no son vacíos y tienen al menos un ítem.
-```
+
 
 ### Ticket Promedio
 
@@ -104,7 +116,7 @@ Satisfaccion Promedio =
 Porcentaje de Entregas a Tiempo = 
 	DIVIDE(
 		[total entregas a tiempo], 
-		[conteo pedidos entregados], 
+		[conteo pedidos entregados] 
 	)
 ```
 > **Nota de desarrollo:**
