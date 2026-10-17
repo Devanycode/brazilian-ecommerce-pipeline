@@ -53,6 +53,7 @@ Pedidos Totales =
 	DISTINCTCOUNT(
 	    'brazilian_ecommerce tabla_analitica'[order_id]
 	)
+
 ```
 > **Nota de Desarrollo:**
 - Cuenta únicamente los pedidos que no son vacíos y tienen al menos un ítem.
