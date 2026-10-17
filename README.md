@@ -87,9 +87,49 @@ python build_analytical_table.py  # Construye y carga la tabla analítica
 ```
 
 ---
+## Dashboard
+
+Dashboard en Power BI construido sobre la tabla analítica (`brazilian_ecommerce.tabla_analitica` en MySQL). Responde: cuánto se vende, dónde, en qué categorías, qué tan rápido se entrega y qué tan satisfechos quedan los clientes.
+
+### Capturas
+
+**Vista general**
+![Dashboard Overview](docs/images/powerbi/dashboard-overview.png)
+
+**Vista filtrada (año 2018, categorías alimentos y beleza_saude)**
+![Dashboard Filtered](docs/images/powerbi/dashboard-filtered.png)
+
+### Qué incluye
+
+| Elemento | Detalle |
+|---|---|
+| KPIs (6) | Ingresos Totales, Ticket Promedio, Pedidos Totales, Tiempo Promedio de Entrega, Satisfacción Promedio, Porcentaje de Entregas a Tiempo |
+| Gráficos (5) | Ingresos por año y mes, ingresos y unidades vendidas por categoría, Top 5 ingresos por estado, tiempo de entrega por estado, pedidos por tipo de pago |
+| Filtros (3) | Año, Mes, Categoría |
+
+### Alcance y límites
+
+- **Periodo:** enero 2017 – agosto 2018 (detalle en [`dax_documentation.md`](docs/dax_documentation.md#contexto-de-reporte)).
+- **Ingresos:** suma de `price`, sin incluir el valor del envío.
+- **Pedidos sin ítems** (775 en el dataset) no aparecen porque la tabla analítica los excluye al unir con `order_items`.
+- Las funciones de `src/analytics.py` usan toda la información histórica (2016–2018), por lo que sus totales no coinciden con los del dashboard que está filtrado.
+
+### Cómo abrirlo
+
+1. Instala [Power BI Desktop](https://powerbi.microsoft.com/desktop) (gratuito, solo Windows).
+2. Abre `powerbi/dashboard_olist.pbix`. Los datos vienen incluidos, no necesitas MySQL excepto si quieres usar 'Actualizar'
+
+
+### Documentación
+
+| Documento | Contenido |
+|---|---|
+| [`docs/data_model.md`](docs/data_model.md) | Tablas, llaves y relaciones del dataset |
+| [`docs/dax_documentation.md`](docs/dax_documentation.md) | Medidas y columnas DAX, con su lógica |
+
+---
 ## Próximas mejoras
 
-- Conectar Power BI directamente a MySQL y construir un dashboard de negocio.
 - Definir claves primarias y foráneas reales a nivel de base de datos.
 - Automatizar la actualización de los datos mediante un script programado.
 - Implementar pruebas automatizadas.
