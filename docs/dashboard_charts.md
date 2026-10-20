@@ -60,7 +60,7 @@ Detalle en [`dax_documentation.md`](dax_documentation.md#contexto-de-reporte).
 
 | Campo | Uso | 
 | ----- | --- |
-| Eje X | `Ingresos Totales`| |
+| Eje X | `Ingresos Totales`| 
 | Eje Y | `customer_state` |
 
 ***Filtro propio:*** *Top N 5 superior*
@@ -78,6 +78,7 @@ Detalle en [`dax_documentation.md`](dax_documentation.md#contexto-de-reporte).
 
 **Vista con barra de deslizamiento**
 ![Tiempo Promedio de Entrega por Estado con scroll](images/powerbi/charts/promedio-entrega-estado.png)
+
 
 **Vista completa desde `Modo Enfoque`**
 ![Tiempo Promedio de Entrega por Estado Modo Enfoque](images/powerbi/charts/promedio-entrega-estado-modo-enfoque.png)
@@ -108,6 +109,6 @@ Detalle en [`dax_documentation.md`](dax_documentation.md#contexto-de-reporte).
 
 **Qué muestra:** Qué porcentaje de los pedidos se realizan con qué medio de pago.
 
-**Cómo leerlo:** A la derecha se ve la leyenda con su respectivo color que representa un tipo de pago, en el círculo, se ve un área rellena del color que representa a un tipo de pago, a simple vista se puede ver cuál es el área más rellena, pero, para ver la cifra exacta, el área apunta hacia afuera mostrando un porcentaje, que indica qué porcentaje de los pedidos que se realizan con ese medio de pago. 
+**Cómo leerlo:** A la derecha se ve la leyenda con su respectivo color que representa un tipo de pago, en el círculo, se ve un área rellena del color que representa a un tipo de pago, a simple vista se puede ver cuál es el área más rellena, pero, para ver la cifra exacta, el área apunta hacia afuera mostrando un porcentaje, que indica el porcentaje de pedidos realizados con ese medio de pago. 
 
 **Limitaciones:** Para evitar problemas de granularidad al crear la tabla analítica, sólo se toma en cuenta un medio de pago por pedido, que sería del primer pago registrado (en caso de que haya tenido varios) y por ende, si alguien utilizó varios métodos de pago sólo se tendrá en cuenta uno en este análisis.
