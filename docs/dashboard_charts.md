@@ -76,11 +76,11 @@ Detalle en [`dax_documentation.md`](dax_documentation.md#contexto-de-reporte).
 
 ### Tiempo Promedio de Entrega (Días) por Estado (Descendente)
 
-**Vista con barra de deslizamiento**
+#### Vista con barra de deslizamiento
 ![Tiempo Promedio de Entrega por Estado con scroll](images/powerbi/charts/promedio-entrega-estado.png)
 
 
-**Vista completa desde `Modo Enfoque`**
+#### Vista completa desde `Modo Enfoque`
 ![Tiempo Promedio de Entrega por Estado Modo Enfoque](images/powerbi/charts/promedio-entrega-estado-modo-enfoque.png)
 
 | Campo | Uso |
