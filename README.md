@@ -117,7 +117,7 @@ Dashboard en Power BI construido sobre la tabla analítica (`brazilian_ecommerce
 ### Cómo abrirlo
 
 1. Instala [Power BI Desktop](https://powerbi.microsoft.com/desktop) (gratuito, solo Windows).
-2. Abre `powerbi/dashboard_olist.pbix`. Los datos vienen incluidos, no necesitas MySQL excepto si quieres usar 'Actualizar'
+2. Abre `powerbi/dashboard_olist.pbix`. Los datos vienen incluidos, no necesitas MySQL excepto si quieres usar 'Actualizar'.
 
 
 ### Documentación
@@ -126,6 +126,7 @@ Dashboard en Power BI construido sobre la tabla analítica (`brazilian_ecommerce
 |---|---|
 | [`docs/data_model.md`](docs/data_model.md) | Tablas, llaves y relaciones del dataset |
 | [`docs/dax_documentation.md`](docs/dax_documentation.md) | Medidas y columnas DAX, con su lógica |
+| [`docs/dashboard_charts.md`](docs/dashboard_charts.md) | Explicación detallada de las gráficas usadas |
 
 ---
 ## Próximas mejoras

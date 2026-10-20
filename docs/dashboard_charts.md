@@ -15,7 +15,7 @@ Este documento explica el funcionamiento de las gráficas que se usaron en el da
 
 ---
 ## Contexto de Reporte
-Todas las gráficas reaccionan a un filtro global de período, en este caso el período analizado está entre enero del 2017 y agosto del 2018 debido a que hay muy poca información datada de antes y después del período filtrado, por ende para evitar tener información insuficiente y las gráficas dañen sus líneas de tendencia por falta de datos decidí reducir el período de análisis.
+Todas las gráficas reaccionan a un filtro global de período, en este caso el período analizado está entre enero del 2017 y agosto del 2018 debido a que hay muy poca información datada de antes y después del período filtrado, por ende para evitar tener información insuficiente y las gráficas o sus líneas de tendencia se distorsionen por falta de datos decidí reducir el período de análisis.
 Detalle en [`dax_documentation.md`](dax_documentation.md#contexto-de-reporte).
 
 
@@ -108,6 +108,6 @@ Detalle en [`dax_documentation.md`](dax_documentation.md#contexto-de-reporte).
 
 **Qué muestra:** Qué porcentaje de los pedidos se realizan con qué medio de pago.
 
-**Cómo leerlo:** A la derecha se ve la leyenda con su respectivo color que representa un tipo de pago, en el círculo, se ve un área rellena del color que representa a un tipo de pago, a simple vista se puede ver cuál es el área más rellena, pero, para ver la cifra exacta, el área apunta hacia afuera mostrando un porcentaje, que indica qué porcentaje de las compras se realiza con ese medio de pago. 
+**Cómo leerlo:** A la derecha se ve la leyenda con su respectivo color que representa un tipo de pago, en el círculo, se ve un área rellena del color que representa a un tipo de pago, a simple vista se puede ver cuál es el área más rellena, pero, para ver la cifra exacta, el área apunta hacia afuera mostrando un porcentaje, que indica qué porcentaje de los pedidos que se realizan con ese medio de pago. 
 
-**Limitaciones:** Para evitar problemas de granularidad al crear la tabla analítica, sólo se toma en cuenta un medio de pago por pedido, con el que pagó la primera cuota (en caso de que haya tenido varias) y por ende, si alguien usó varios métodos de pago sólo se tendrá cuenta uno en este análisis.
+**Limitaciones:** Para evitar problemas de granularidad al crear la tabla analítica, sólo se toma en cuenta un medio de pago por pedido, que sería del primer pago registrado (en caso de que haya tenido varios) y por ende, si alguien utilizó varios métodos de pago sólo se tendrá en cuenta uno en este análisis.
