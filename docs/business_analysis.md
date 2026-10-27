@@ -7,7 +7,7 @@ En este documento se realizarán análisis de negocio, extraídos de los datos q
 
 ![categorías comparativa](images/powerbi/analysis/categorias-comparativa.png)
 
-Aunque los productos que más se venden son de la categoría `cama_mesa_baño`, los productos que más generan ingresos son de las categorías `belleza y salud` y `relojes y regalos`, esta última incluso con 5.121 ventas de diferencia con la más vendida. 
+Aunque los productos que más se venden son de la categoría `cama_mesa_banho`, los productos que más generan ingresos son de las categorías `beleza_saude` y `relogios_presentes`, esta última incluso con 5.121 ventas de diferencia con la más vendida. 
 
 Esto puede indicar que las personas compran mucho la categoría más vendida precisamente por sus precios bajos. 
 
@@ -19,6 +19,8 @@ FROM tabla_analitica
 WHERE product_category_name IN ('beleza_saude', 'relogios_presentes', 'cama_mesa_banho')
 GROUP BY categoria;
 ```
+
+*Esta consulta incluye todo el histórico y no está filtrada*
 
 | categoria          | precio_promedio |
 | ------------------ | --------------- |
@@ -36,7 +38,7 @@ Aquí se ve claramente que los precios en promedio son mucho más elevados para 
 
 Hubo un pico de ingresos en Noviembre del 2017.
 En ese año hubo picos históricos en compras electrónicas debido al `Black Friday` y `Cyber Monday`.
-En Brasil hay una ley de liquidación o aguinaldo `13º salario`([Lei nº 4.090, de 13 de julho de 1962](http://planalto.gov.br)) que se da a más tardar el 30 de Noviembre, para algunos esa liquidación llegó para los períodos de Black Friday, lo que puede indicar que existen las condiciones para que haya existido ese pico, que incluso decayó en Diciembre y en Octubre fue aún más bajo. 
+En Brasil hay una ley de liquidación o aguinaldo `13º salario`([Lei nº 4.090, de 13 de julho de 1962](https://www.tst.jus.br/13-salario)) que se da a más tardar el 30 de Noviembre, para algunos esa liquidación llegó para los períodos de Black Friday, lo que puede indicar que existen las condiciones para que haya existido ese pico, que incluso decayó en Diciembre y en Octubre fue aún más bajo. 
 
 ```mysql
 WITH 
@@ -82,33 +84,7 @@ Aunque algo que también se podría analizar fue un aumento constante en la plat
 
 El estado que más ingresos genera es SP, lo que tiene una relación recíproca con los tiempos de entrega promedio siendo esta la más baja, entonces, esto puede decirnos que la cantidad de compras que se realizan en ese estado también está apoyada por la velocidad en la que se envían los productos.
 
-Esta función hecha en Python que compara las ventas locales con las foráneas nos puede dar un mejor punto de vista.
-
-```python 
-def ventas_locales_vs_foraneas_por_estado(tabla_analitica: pd.DataFrame) -> pd.DataFrame:
-    """
-    Compara compras a vendedores locales vs foráneos por estado del cliente.
-    """
-    resultado = (
-        df
-        .groupby(["customer_state", "es_venta_local"], as_index=False)
-        .agg(ventas=("price", "sum"))
-        .pivot(index="customer_state", columns="es_venta_local", values="ventas")
-    )
-    # Renombrar columnas: True = local, False = foraneo
-    resultado = resultado.rename(columns={
-        True: "ventas_local",
-        False: "ventas_foraneo"
-    })
-    # Si un estado solo compra de un tipo, el otro lado queda nulo
-    resultado = resultado.fillna(0)
-    resultado["diferencia"] = resultado["ventas_local"] - resultado["ventas_foraneo"]
-    resultado["pct_local"] = (
-        resultado["ventas_local"] /
-        (resultado["ventas_local"] + resultado["ventas_foraneo"]) * 100
-    )
-    return resultado.sort_values("pct_local", ascending=False)
-```
+Esta función hecha en Python [`src/analytics.py`](../src/analytics.py#L114) que compara las ventas locales con las foráneas nos puede dar un mejor punto de vista.
 
 *Cabe destacar que esta función no está filtrada e incluye absolutamente todo el período de datos de la `tabla_analitica`*
 
@@ -123,7 +99,7 @@ def ventas_locales_vs_foraneas_por_estado(tabla_analitica: pd.DataFrame) -> pd.D
 | **BA**         | 482.941,54     | 28.408,45    | -454.533,09   | 5,56%     |
 | **DF**         | 298.177,39     | 4.426,55     | -293.750,84   | 1,46%     |
 | **GO**         | 291.202,94     | 3.389,01     | -287.813,93   | 1,15%     |
-| ----           | ----           | ----         | ----          |  ----     |
+| ....           | ....           | ....         | ....          | ....      |
 
 En esta tabla se puede ver que la mayor parte de las compras en SP son locales y por eso también su tiempo de entrega se ve beneficiado. Lo que se puede comprobar con la siguiente consulta:
 ```mysql
@@ -137,11 +113,13 @@ FROM tabla_analitica
 GROUP BY es_venta_local
 ```
 
+*Esta consulta incluye todo el histórico y no está filtrada*
+
 | es_venta_local | tiempo_promedio_entrega |
 | -------------- | ----------------------- |
 | Sí             | 7.86                    |
 | No             | 14.99                   |
-Evidenciando que el tiempo promedio de entrega se reduce drásticamente cuando la entrega se realiza de forma local, pasando de unos 14,99 días en promedio cuando la entrega es foránea a unos 7,86 días cuando la entrega es local, hablando específicamente de SP. 
+Evidenciando que el tiempo promedio de entrega se reduce drásticamente cuando la entrega se realiza de forma local, pasando de unos 14,99 días en promedio cuando la entrega es foránea a unos 7,86 días cuando la entrega es local. 
 
 Por otro lado estos estados: PR(15,64%), MG(11,70%), RS(7,59%), RJ(10,34%) que están en el top de ingresos también están en una buena posición de porcentaje de entregas locales, por lo que igual se ven beneficiados sus tiempos de entrega.
 Aunque también puede deberse a que están cerca de SP
@@ -189,11 +167,12 @@ ORDER BY AVG(freight_value) DESC;
 | **RO**         | 46.140,64      | 0,00         | -46.140,64  | 0,00%     |
 | **SE**         | 58.920,85      | 0,00         | -58.920,85  | 0,00%     |
 | **TO**         | 49.621,74      | 0,00         | -49.621,74  | 0,00%     |
+
 *Parte final de la función anterior de Python*
 
 
 Y si nos fijamos en la parte de abajo del resultado de la función de Python que hicimos más arriba, vemos los estados en los que absolutamente ninguna compra es local. Lo que explica los precios altos de los envíos y el tiempo que tardan en llegar a estos estados, sumado a los pocos pedidos que hay a comparación de ciudades principales. 
-Aquí podemos ver estados con precios de envío muy altos como RR, RO, AC, TO, SE, AL, PA, con precios entre R$35,83 y R$42,98 lo que es mucho si lo comparamos con las ciudades principales: SP con un promedio de R$15,15 y PR con uno de R$20,53, una diferencia muy grande. 
+Aquí podemos ver estados con precios de envío muy altos como RR, RO, AC, TO, SE, AL, PA, con precios entre R$37,25 y R$42,98 lo que es mucho si lo comparamos con las ciudades principales: SP con un promedio de R$15,15 y PR con uno de R$20,53, una diferencia muy grande. 
 
 *Todo esto parece indicar las grandes diferencias entre los precios de envío y el tiempo de entrega que hay en las regiones*
 
@@ -202,7 +181,7 @@ Aquí podemos ver estados con precios de envío muy altos como RR, RO, AC, TO, S
 
 ![2017 vs 2018](images/powerbi/analysis/2017-vs-2018.png)
 
-Si analizamos el año 2017 sólo de enero a agosto y lo comparamos con los datos de ese mismo período en 2018 vemos que las diferencias son de más del doble, se pasó de unos ingresos de R$ 3,11 millones a R$ 7,39 millones, aumentando en un 137,62%  la cifra anterior, el ticket promedio se mantiene prácticamente igual (sólo cambian unas milésimas: de '137,18' a '137,35') lo que nos indica que no es que hayan aumentado los precios sino el volumen de ventas, que pasó de 22.693 a 53.774 aumentando en 31.081 pedidos la cifra anterior por el mismo periodo, de esto se puede concluir que la empresa creció mucho del año 2017 al año 2018 en estos datos. 
+Si analizamos el año 2017 sólo de enero a agosto y lo comparamos con los datos de ese mismo período en 2018 vemos que las diferencias son de más del doble, se pasó de unos ingresos de R$ 3,11 millones a R$ 7,39 millones, aumentando en un 137,62%  la cifra anterior, el ticket promedio se mantiene prácticamente igual (sólo cambian unas milésimas: de '137,18' a '137,35' son 17 centavos) lo que nos indica que no es que hayan aumentado los precios sino el volumen de ventas, que pasó de 22.693 a 53.774 aumentando en 31.081 pedidos la cifra anterior por el mismo periodo, de esto se puede concluir que la empresa creció mucho del año 2017 al año 2018 en estos datos. 
 
 
 ## Pedidos por tipo de pago 
@@ -235,6 +214,6 @@ FROM una_cuota_vs_varias_cuotas;
 | pago_una_cuota | pago_varias_cuotas | porcentaje_una_cuota | porcentajes_varias_cuotas |
 | -------------- | ------------------ | -------------------- | ------------------------- |
 | 25455          | 51338              | 33.15                | 66.85                     |
-Con esta consulta por ejemplo vemos que el 66,85% de las personas que paga con tarjeta lo hace a plazos con múltiples cuotas, lo que puede costarle un dinero extra a la empresa por las tasas de financiación, por eso si se enfocan en tener mejoras para hacer que suba el porcde
+Con esta consulta por ejemplo vemos que el 66,85% de los pagos con tarjeta se hacen a plazos con múltiples cuotas, lo que puede costarle un dinero extra a la empresa por las tasas de financiación, por eso si se enfocan en tener mejoras para hacer que suba el porcentaje de pedidos pagados a una sola cuota, podrían mejorar sus ganancias. Así que un objetivo sería subir ese 33,15% de compras a pago único.
 
 

@@ -99,6 +99,20 @@ Dashboard en Power BI construido sobre la tabla analítica (`brazilian_ecommerce
 **Vista filtrada (año 2018, categorías alimentos y beleza_saude)**
 ![Dashboard Filtered](docs/images/powerbi/dashboard-filtered.png)
 
+
+### Hallazgos Destacados
+### Hallazgos destacados
+
+| Hallazgo | Dato | Detalle |
+|---|---|---|
+| **Black Friday concentra las ventas de noviembre** | El 30,37 % de los ingresos (33,19 % de las unidades) de noviembre de 2017 se vendió en solo 4 días, del 24 al 27 | [Ver análisis](docs/business_analysis.md#pico-de-noviembre) |
+| **Vender local acorta la entrega** | 7,86 días en ventas locales frente a 14,99 en foráneas | [Ver análisis](docs/business_analysis.md#ingresos-y-tiempos-de-entrega) |
+| **Crecimiento ene–ago 2018 vs 2017** | Ingresos de R$ 3,11 a R$ 7,39 millones (+137,62 %), con ticket promedio casi igual (R$ 137,18 → R$ 137,35) | [Ver análisis](docs/business_analysis.md#2017-vs-2018) |
+| **Más ingresos no es más unidades** | `relogios_presentes` ingresa más que `cama_mesa_banho` con casi la mitad de unidades: precio promedio R$ 201 frente a R$ 93 | [Ver análisis](docs/business_analysis.md#comparativa-de-categorías-top) |
+
+Análisis completo en [`docs/business_analysis.md`](docs/business_analysis.md).
+
+
 ### Qué incluye
 
 | Elemento | Detalle |
@@ -128,6 +142,8 @@ Dashboard en Power BI construido sobre la tabla analítica (`brazilian_ecommerce
 | [`docs/dax_documentation.md`](docs/dax_documentation.md) | Medidas y columnas DAX, con su lógica |
 | [`docs/dashboard_charts.md`](docs/dashboard_charts.md) | Explicación detallada de las gráficas usadas |
 | [`docs/business_analysis.md`](docs/business_analysis.md) | Análisis de negocio en base al dashboard, complementado con consultas SQL y funciones de Python | 
+
+
 
 ---
 ## Próximas mejoras
