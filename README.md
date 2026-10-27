@@ -100,7 +100,6 @@ Dashboard en Power BI construido sobre la tabla analítica (`brazilian_ecommerce
 ![Dashboard Filtered](docs/images/powerbi/dashboard-filtered.png)
 
 
-### Hallazgos Destacados
 ### Hallazgos destacados
 
 | Hallazgo | Dato | Detalle |

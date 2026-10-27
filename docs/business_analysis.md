@@ -76,7 +76,6 @@ O sea que aproximadamente 3 de cada 10 ventas que se realizaron en el mes de Nov
 Aunque algo que también se podría analizar fue un aumento constante en la plataforma, donde en los meses de marzo, abril y mayo tuvieron ventas muy cercanas a ese pico de Noviembre. Lo que podría indicar simplemente un crecimiento en la plataforma después de ese pico a finales de 2017 y que las personas se recuperaran un poco de sus gastos de Navidad. 
 
 
-
 ## Ingresos y tiempos de Entrega
 
 ### Superiores 
@@ -102,6 +101,7 @@ Esta función hecha en Python [`src/analytics.py`](../src/analytics.py#L114) que
 | ....           | ....           | ....         | ....          | ....      |
 
 En esta tabla se puede ver que la mayor parte de las compras en SP son locales y por eso también su tiempo de entrega se ve beneficiado. Lo que se puede comprobar con la siguiente consulta:
+
 ```mysql
 SELECT 
 	CASE 
@@ -119,6 +119,7 @@ GROUP BY es_venta_local
 | -------------- | ----------------------- |
 | Sí             | 7.86                    |
 | No             | 14.99                   |
+
 Evidenciando que el tiempo promedio de entrega se reduce drásticamente cuando la entrega se realiza de forma local, pasando de unos 14,99 días en promedio cuando la entrega es foránea a unos 7,86 días cuando la entrega es local. 
 
 Por otro lado estos estados: PR(15,64%), MG(11,70%), RS(7,59%), RJ(10,34%) que están en el top de ingresos también están en una buena posición de porcentaje de entregas locales, por lo que igual se ven beneficiados sus tiempos de entrega.
@@ -181,7 +182,7 @@ Aquí podemos ver estados con precios de envío muy altos como RR, RO, AC, TO, S
 
 ![2017 vs 2018](images/powerbi/analysis/2017-vs-2018.png)
 
-Si analizamos el año 2017 sólo de enero a agosto y lo comparamos con los datos de ese mismo período en 2018 vemos que las diferencias son de más del doble, se pasó de unos ingresos de R$ 3,11 millones a R$ 7,39 millones, aumentando en un 137,62%  la cifra anterior, el ticket promedio se mantiene prácticamente igual (sólo cambian unas milésimas: de '137,18' a '137,35' son 17 centavos) lo que nos indica que no es que hayan aumentado los precios sino el volumen de ventas, que pasó de 22.693 a 53.774 aumentando en 31.081 pedidos la cifra anterior por el mismo periodo, de esto se puede concluir que la empresa creció mucho del año 2017 al año 2018 en estos datos. 
+Si analizamos el año 2017 sólo de enero a agosto y lo comparamos con los datos de ese mismo período en 2018 vemos que las diferencias son de más del doble, se pasó de unos ingresos de R$ 3,11 millones a R$ 7,39 millones, aumentando en un 137,62%  la cifra anterior, el ticket promedio se mantiene prácticamente igual (sólo cambian 17 centavos: de '137,18' a '137,35') lo que nos indica que no es que hayan aumentado los precios sino el volumen de ventas, que pasó de 22.693 a 53.774 aumentando en 31.081 pedidos la cifra anterior por el mismo periodo, de esto se puede concluir que la empresa creció mucho del año 2017 al año 2018 en estos datos. 
 
 
 ## Pedidos por tipo de pago 
@@ -214,6 +215,7 @@ FROM una_cuota_vs_varias_cuotas;
 | pago_una_cuota | pago_varias_cuotas | porcentaje_una_cuota | porcentajes_varias_cuotas |
 | -------------- | ------------------ | -------------------- | ------------------------- |
 | 25455          | 51338              | 33.15                | 66.85                     |
+
 Con esta consulta por ejemplo vemos que el 66,85% de los pagos con tarjeta se hacen a plazos con múltiples cuotas, lo que puede costarle un dinero extra a la empresa por las tasas de financiación, por eso si se enfocan en tener mejoras para hacer que suba el porcentaje de pedidos pagados a una sola cuota, podrían mejorar sus ganancias. Así que un objetivo sería subir ese 33,15% de compras a pago único.
 
 
