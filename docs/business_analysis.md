@@ -216,6 +216,6 @@ FROM una_cuota_vs_varias_cuotas;
 | -------------- | ------------------ | -------------------- | ------------------------- |
 | 25455          | 51338              | 33.15                | 66.85                     |
 
-Con esta consulta por ejemplo vemos que el 66,85% de los pagos con tarjeta se hacen a plazos con múltiples cuotas, lo que puede costarle un dinero extra a la empresa por las tasas de financiación, por eso si se enfocan en tener mejoras para hacer que suba el porcentaje de pedidos pagados a una sola cuota, podrían mejorar sus ganancias. Así que un objetivo sería subir ese 33,15% de compras a pago único.
+Con esta consulta por ejemplo vemos que el 66,85% de los pagos con tarjeta se hacen a plazos con múltiples cuotas, lo que puede costarle un dinero extra a la empresa por las tasas de financiación, por eso si se enfocan en tener mejoras para hacer que suba el porcentaje de pedidos pagados a una sola cuota, podrían reducir costos de financiación. Así que un objetivo sería subir ese 33,15% de compras a pago único.
 
 
