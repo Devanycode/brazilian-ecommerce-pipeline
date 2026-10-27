@@ -121,7 +121,6 @@ def ventas_locales_vs_foraneas_por_estado(tabla_analitica: pd.DataFrame) -> pd.D
         .groupby(["customer_state", "es_venta_local"], as_index=False)
         .agg(ventas=("price", "sum"))
         .pivot(index="customer_state", columns="es_venta_local", values="ventas")
-        .reset_index()
     )
     
     # Renombrar columnas: True = local, False = foraneo

@@ -1,7 +1,7 @@
 import pandas as pd
 import extract
 import contracts
-from inspector import inspect_csv, verificar_contratos
+from inspector import verificar_contratos
 import load
 import transform as tr
 import analytics as an

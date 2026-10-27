@@ -127,6 +127,7 @@ Dashboard en Power BI construido sobre la tabla analítica (`brazilian_ecommerce
 | [`docs/data_model.md`](docs/data_model.md) | Tablas, llaves y relaciones del dataset |
 | [`docs/dax_documentation.md`](docs/dax_documentation.md) | Medidas y columnas DAX, con su lógica |
 | [`docs/dashboard_charts.md`](docs/dashboard_charts.md) | Explicación detallada de las gráficas usadas |
+| [`docs/business_analysis.md`](docs/business_analysis.md) | Análisis de negocio en base al dashboard, complementado con consultas SQL y funciones de Python | 
 
 ---
 ## Próximas mejoras

@@ -47,7 +47,7 @@ tabla = tr.agregar_indicador_venta_local(tabla)
 tabla = tr.solucion_contrato_tabla_analitica(tabla)
 
 print(f"Tabla analítica creada: {tabla.shape[0]} filas, {tabla.shape[1]} columnas")
-
+"""
 
 # 4. Inspección de tablas
 todas_cumplen, resultados = verificar_contratos(
@@ -64,4 +64,11 @@ todas_cumplen, resultados = verificar_contratos(
 if todas_cumplen:
     tabla_a_cargar = {"tabla_analitica": tabla}
     load.cargar_tablas(tabla_a_cargar)
-    load.verificar_carga(tabla_a_cargar)
+    load.verificar_carga(tabla_a_cargar)"""
+
+import analytics as an 
+
+ventas_loc_vs_for = an.ventas_locales_vs_foraneas_por_estado(tabla)
+
+
+print(ventas_loc_vs_for)
